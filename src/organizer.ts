@@ -95,11 +95,17 @@ export function organizeKindleEntriesByBooks(
   const result: Book[] = [];
 
   entriesParsed.forEach((entry) => {
-    const book: Book = result.find((r) => r.title === entry.bookTitle) || {
-      title: entry.bookTitle,
-      author: entry.authors,
-      entries: [],
-    };
+    let book: Book = result.find((r) => r.title === entry.bookTitle);
+
+    if (!book) {
+      book = {
+        title: entry.bookTitle,
+        author: entry.authors,
+        entries: [],
+      };
+
+      result.push(book);
+    }
 
     book.entries.push({
       content: entry.content,
@@ -107,8 +113,6 @@ export function organizeKindleEntriesByBooks(
       page: entry.page,
       location: entry.location,
     });
-
-    result.push(book);
   });
 
   return result;
