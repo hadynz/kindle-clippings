@@ -1,6 +1,6 @@
 {
-  "name": "@darylserrano/kindle-clippings",
-  "version": "2.2.5",
+  "name": "@hadynz/kindle-clippings",
+  "version": "1.0.0",
   "description": "Package for parsing a MyClippings.txt file obtained from a Kindle and organizing it",
   "main": "dist/index.js",
   "scripts": {
@@ -11,13 +11,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DarylSerrano/KindleClippings"
+    "url": "git+https://github.com/hadynz/KindleClippings"
   },
   "bugs": {
-    "url": "https://github.com/DarylSerrano/KindleClippings/issues"
+    "url": "https://github.com/hadynz/KindleClippings/issues"
   },
   "keywords": [],
-  "author": "Daryl Serrano Hipolito <darylserrano39@gmail.com>",
+  "author": "Hady Osman <hadyos@gmail.com>",
   "license": "MIT",
   "types": "dist/index.d.ts",
   "devDependencies": {
