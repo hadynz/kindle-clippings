@@ -25,7 +25,7 @@ export function organizeKindleEntriesByBookTitle(
   }
 
   entriesParsed.forEach((entry) => {
-    let bookTitle = entry.bookTile;
+    let bookTitle = entry.bookTitle;
     if (newKindleEntriesOrganized.has(bookTitle)) {
       newKindleEntriesOrganized.get(bookTitle).push(entry);
     } else {
@@ -75,7 +75,7 @@ export function organizeKindleEntriesByAuthors(
 type Entry = {
   content: string;
   type: EntryType;
-  page: number;
+  page: string;
   location: string;
 };
 
@@ -95,8 +95,8 @@ export function organizeKindleEntriesByBooks(
   const result: Book[] = [];
 
   entriesParsed.forEach((entry) => {
-    const book: Book = result.find((r) => r.title === entry.bookTile) || {
-      title: entry.bookTile,
+    const book: Book = result.find((r) => r.title === entry.bookTitle) || {
+      title: entry.bookTitle,
       author: entry.authors,
       entries: [],
     };

@@ -16,9 +16,9 @@ export enum EntryType {
 
 export class KindleEntryParsed {
   private kindleEntry: KindleEntry;
-  authors: string;
-  bookTile: string;
-  page: number;
+  authors?: string;
+  bookTitle: string;
+  page: string;
   location: string;
   dateOfCreation: string;
   type: EntryType;
@@ -42,67 +42,31 @@ export class KindleEntryParsed {
 
   parseAuthor(): void {
     const bookTitleAndAuthors: string = this.kindleEntry.bookTitleAndAuthors;
-    let ocurrenceIndex: number = bookTitleAndAuthors.indexOf("(");
 
-    if (ocurrenceIndex === -1) {
-      throw new Error(
-        `Could not parse author from bookTitleAndAuthors of KindleEntry: ${bookTitleAndAuthors}`
-      );
+    const matches = bookTitleAndAuthors.match(/.*\(([^)]+)\)$/);
+
+    // Not all books will always have book meta data
+    if (matches) {
+      this.authors = matches[1];
     }
-
-    let nextOcurrenceIndex: number = bookTitleAndAuthors.indexOf(
-      "(",
-      ocurrenceIndex + 1
-    );
-    for (
-      ;
-      nextOcurrenceIndex !== -1 &&
-      nextOcurrenceIndex < bookTitleAndAuthors.length;
-
-    ) {
-      ocurrenceIndex = nextOcurrenceIndex;
-      nextOcurrenceIndex = bookTitleAndAuthors.indexOf("(", ocurrenceIndex + 1);
-    }
-
-    const closingParenthesesIndex: number = bookTitleAndAuthors.indexOf(
-      ")",
-      ocurrenceIndex
-    );
-    const authors: string = bookTitleAndAuthors.substring(
-      ocurrenceIndex + 1,
-      closingParenthesesIndex
-    );
-    // Save authors
-    this.authors = authors;
   }
 
   parseBook() {
     const bookTitleAndAuthors: string = this.kindleEntry.bookTitleAndAuthors;
-    let firstOccurrenceIndex: number = bookTitleAndAuthors.indexOf("(");
-    let nextOccurrenceIndex: number = bookTitleAndAuthors.indexOf(
-      "(",
-      firstOccurrenceIndex + 1
-    );
-    let lastIndex: number = firstOccurrenceIndex;
-    for (; nextOccurrenceIndex !== -1; ) {
-      lastIndex = firstOccurrenceIndex;
-      firstOccurrenceIndex = bookTitleAndAuthors.indexOf(
-        "(",
-        firstOccurrenceIndex + 1
-      );
-      if (firstOccurrenceIndex === -1) {
-        firstOccurrenceIndex = lastIndex;
-      }
-      nextOccurrenceIndex = bookTitleAndAuthors.indexOf(
-        "(",
-        firstOccurrenceIndex + 1
-      );
+
+    const matches = bookTitleAndAuthors.match(/.*\(([^)]+)\)$/);
+
+    // An author is specified "title (author)"
+    if (matches) {
+      const parenthesesIndex = bookTitleAndAuthors.indexOf(`(${matches[1]})`);
+      this.bookTitle = bookTitleAndAuthors
+        .substring(0, parenthesesIndex)
+        .trim();
     }
-    const bookTile: string = bookTitleAndAuthors.substring(
-      0,
-      firstOccurrenceIndex
-    );
-    this.bookTile = bookTile.trim();
+    // An author is not specified "title"
+    else {
+      this.bookTitle = bookTitleAndAuthors.trim();
+    }
   }
 
   parseMetadata() {
@@ -139,8 +103,6 @@ export class KindleEntryParsed {
     // Page parsing
     if (hasPageMetadata) {
       this.page = this.parsePage(pageMetadata);
-    } else {
-      this.page = 0;
     }
 
     // location parsing
@@ -158,21 +120,15 @@ export class KindleEntryParsed {
   }
 
   parsePage(pageMetadata: string) {
-    const matchPage: RegExpExecArray | null | undefined = /\d+/.exec(
-      pageMetadata
+    const matches = pageMetadata.match(/^.* (.*)$/);
+
+    if (matches) {
+      return matches[1];
+    }
+
+    throw new Error(
+      `Can't parse page number from pageMetadataStr: ${pageMetadata}`
     );
-    if (!matchPage) {
-      throw new Error(
-        `Can't parse page number from pageMetadataStr: ${pageMetadata}`
-      );
-    }
-    const page = Number(matchPage[0]);
-    if (isNaN(page)) {
-      throw new Error(
-        `Can't parse page number of: matchPage: ${matchPage} from pageMetadataStr: ${pageMetadata}`
-      );
-    }
-    return page;
   }
 
   parseLocation(locationMetadata: string) {
@@ -239,7 +195,7 @@ export class KindleEntryParsed {
   toJSON() {
     return {
       authors: this.authors,
-      bookTile: this.bookTile,
+      bookTile: this.bookTitle,
       page: this.page,
       location: this.location,
       dateOfCreation: this.dateOfCreation,

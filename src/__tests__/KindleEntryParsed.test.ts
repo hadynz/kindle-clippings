@@ -4,8 +4,8 @@ import { KindleEntryParsed, EntryType } from "../KindleEntryParsed";
 interface DataEntry {
   entry: KindleEntry;
   titleParsed: string;
-  author: string;
-  page: number;
+  author?: string;
+  page?: string;
   location: string;
   dateOfCreation: string;
   type: EntryType;
@@ -20,10 +20,10 @@ const sampleEntries: Array<DataEntry> = [
     ),
     titleParsed: "非オタの彼女が俺の持ってるエロゲに興味津々なんだが……",
     author: "滝沢　慧;睦茸",
-    page: 197,
+    page: "197",
     location: "2031-2035",
     dateOfCreation: "Añadido el sábado, 12 de octubre de 2019 0:37:31",
-    type: EntryType.Highlight
+    type: EntryType.Highlight,
   },
   {
     entry: new KindleEntry(
@@ -33,10 +33,10 @@ const sampleEntries: Array<DataEntry> = [
     ),
     titleParsed: "僕が七不思議になったわけ (メディアワークス文庫)",
     author: "小川 晴央",
-    page: 14,
+    page: "14",
     location: "182-183",
     dateOfCreation: "Añadido el lunes, 25 de noviembre de 2019 0:43:38",
-    type: EntryType.Highlight
+    type: EntryType.Highlight,
   },
   {
     entry: new KindleEntry(
@@ -44,12 +44,12 @@ const sampleEntries: Array<DataEntry> = [
       "- Your Highlight on Location 35-36 | Added on Monday, July 20, 2020 12:58:07 AM",
       "軟禁状態であったことは事実なのだから、おそらく外の人間からすれば、人権を無視された酷い生活に見えたのだろう。"
     ),
-    titleParsed: "Ｃｈａｏｓ；Ｃｈｉｌｄ　－Ｃｈｉｌｄｒｅｎ’ｓ　Ｒｅｖｉｖｅ－ (講談社ラノベ文庫)",
+    titleParsed:
+      "Ｃｈａｏｓ；Ｃｈｉｌｄ　－Ｃｈｉｌｄｒｅｎ’ｓ　Ｒｅｖｉｖｅ－ (講談社ラノベ文庫)",
     author: "ＭＡＧＥＳ．;Ｃｈｉｙｏ ｓｔ．ｉｎｃ;梅原英司",
-    page: 0,
     location: "35-36",
     dateOfCreation: "Added on Monday, July 20, 2020 12:58:07 AM",
-    type: EntryType.Highlight
+    type: EntryType.Highlight,
   },
   {
     entry: new KindleEntry(
@@ -59,20 +59,43 @@ const sampleEntries: Array<DataEntry> = [
     ),
     titleParsed: "Le Retour du roi",
     author: "J.R.R. Tolkien",
-    page: 200,
+    page: "200",
     location: "3054-3056",
     dateOfCreation: "Ajouté le mercredi 16 août 2017 02:14:10",
-    type: EntryType.Highlight
-  }
+    type: EntryType.Highlight,
+  },
+  {
+    entry: new KindleEntry(
+      "The Effective Manager (Horstman, Mark)",
+      "- Your Highlight on page ix | location 247-248 | Added on Sunday, 18 February 2018 22:30:47",
+      "It's about getting the most out of your direct reports,"
+    ),
+    titleParsed: "The Effective Manager",
+    author: "Horstman, Mark",
+    page: "ix",
+    location: "247-248",
+    dateOfCreation: "Added on Sunday, 18 February 2018 22:30:47",
+    type: EntryType.Highlight,
+  },
+  {
+    entry: new KindleEntry(
+      "paulo-coehlo-the-devil-and-miss-prym  ",
+      "- Your Highlight on page 14-14 | Added on Saturday, 23 December 2017 09:46:53",
+      "Given the right circumstances, every human being on this earth would be willing to commit evil.'"
+    ),
+    titleParsed: "paulo-coehlo-the-devil-and-miss-prym",
+    location: "14-14",
+    dateOfCreation: "Added on Saturday, 23 December 2017 09:46:53",
+    type: EntryType.Highlight,
+  },
 ];
 
 // eslint-disable-next-line no-undef
 describe("KindleEntryParsed", () => {
-
   describe("parseAuthor", () => {
     test("Obtains author", () => {
       // AAA
-      sampleEntries.forEach(sampleEntry => {
+      sampleEntries.forEach((sampleEntry) => {
         // Arrange
         const kindleParsed: KindleEntryParsed = new KindleEntryParsed(
           sampleEntry.entry
@@ -89,7 +112,7 @@ describe("KindleEntryParsed", () => {
 
   describe("parseBook", () => {
     test("Obtains book title", () => {
-      sampleEntries.forEach(sampleEntry => {
+      sampleEntries.forEach((sampleEntry) => {
         // Arrange
         const kindleParsed: KindleEntryParsed = new KindleEntryParsed(
           sampleEntry.entry
@@ -99,14 +122,14 @@ describe("KindleEntryParsed", () => {
         kindleParsed.parseBook();
 
         // Assert
-        expect(kindleParsed.bookTile).toBe(sampleEntry.titleParsed);
+        expect(kindleParsed.bookTitle).toBe(sampleEntry.titleParsed);
       });
     });
   });
 
   describe("parseEntryType", () => {
     test("Obtains correct entry type", () => {
-      sampleEntries.forEach(sampleEntry => {
+      sampleEntries.forEach((sampleEntry) => {
         // Arrange
         const kindleParsed: KindleEntryParsed = new KindleEntryParsed(
           sampleEntry.entry
@@ -125,7 +148,7 @@ describe("KindleEntryParsed", () => {
 
   describe("parseMetadata", () => {
     test("Obtains correct page", () => {
-      sampleEntries.forEach(sampleEntry => {
+      sampleEntries.forEach((sampleEntry) => {
         // Arrange
         const kindleParsed: KindleEntryParsed = new KindleEntryParsed(
           sampleEntry.entry
@@ -139,7 +162,7 @@ describe("KindleEntryParsed", () => {
     });
 
     test("Obtains correct location", () => {
-      sampleEntries.forEach(sampleEntry => {
+      sampleEntries.forEach((sampleEntry) => {
         // Arrange
         const kindleParsed: KindleEntryParsed = new KindleEntryParsed(
           sampleEntry.entry
@@ -153,7 +176,7 @@ describe("KindleEntryParsed", () => {
     });
 
     test("Obtains correct date of creation", () => {
-      sampleEntries.forEach(sampleEntry => {
+      sampleEntries.forEach((sampleEntry) => {
         // Arrange
         const kindleParsed: KindleEntryParsed = new KindleEntryParsed(
           sampleEntry.entry
