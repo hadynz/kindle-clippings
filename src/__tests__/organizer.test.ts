@@ -72,6 +72,11 @@ const sampleEntries2: KindleEntry[] = [
     "- Your Highlight on page 41 | location 737-738 | Added on Saturday, 9 September 2017 13:27:09",
     "“Don’t you see that the whole aim of Newspeak is to narrow the range of thought? In the end we shall make thoughtcrime literally impossible, because there will be no words in which to express it."
   ),
+  new KindleEntry(
+    "1984 (Orwell, George)",
+    "- Your Note at location 1971 | Added on Wednesday, 6 January 2021 14:22:58",
+    "Airplane Accidents - also how software projects go wrong"
+  ),
 ];
 
 const firstTitle = "非オタの彼女が俺の持ってるエロゲに興味津々なんだが……";
@@ -149,5 +154,9 @@ describe("organizeKindleEntriesByBooks", () => {
 
     expect(secondBook.title).toBe("1984");
     expect(secondBook.entries).toHaveLength(2);
+    expect(secondBook.entries[0].note).toBeUndefined();
+    expect(secondBook.entries[1].note).toBe(
+      "Airplane Accidents - also how software projects go wrong"
+    );
   });
 });

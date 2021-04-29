@@ -1,3 +1,4 @@
+import { relative } from "node:path";
 import { EntryType, KindleEntryParsed } from "./KindleEntryParsed";
 
 /**
@@ -77,6 +78,7 @@ type Entry = {
   type: EntryType;
   page: string;
   location: string;
+  note?: string;
 };
 
 type Book = {
@@ -105,6 +107,17 @@ export function organizeKindleEntriesByBooks(
       };
 
       result.push(book);
+    }
+
+    if (entry.type === EntryType.Note) {
+      const previousEntry = book.entries[book.entries.length - 1];
+
+      if (previousEntry) {
+        previousEntry.note = entry.content;
+        return;
+      }
+
+      throw new Error("Note was not preceded by a highlight");
     }
 
     book.entries.push({
