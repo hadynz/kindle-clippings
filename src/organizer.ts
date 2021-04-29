@@ -96,37 +96,51 @@ export function organizeKindleEntriesByBooks(
 ): Book[] {
   const result: Book[] = [];
 
-  entriesParsed.forEach((entry) => {
-    let book: Book = result.find((r) => r.title === entry.bookTitle);
+  /**
+   * First loop (reducer):
+   * - Skip any "duplicate" highlight. Duplicates are identified by being on the same location
+   * - Assumption: Entries are ordered by location
+   * Second loop (forEach):
+   * - Group entries inside books
+   */
+  entriesParsed
+    .reduce((accumulator, currentValue, currentIndex, list) => {
+      if (currentValue.location === list[currentIndex + 1]?.location) {
+        return accumulator;
+      }
+      return [...accumulator, currentValue];
+    }, [])
+    .forEach((entry) => {
+      let book: Book = result.find((r) => r.title === entry.bookTitle);
 
-    if (!book) {
-      book = {
-        title: entry.bookTitle,
-        author: entry.authors,
-        entries: [],
-      };
+      if (!book) {
+        book = {
+          title: entry.bookTitle,
+          author: entry.authors,
+          entries: [],
+        };
 
-      result.push(book);
-    }
-
-    if (entry.type === EntryType.Note) {
-      const previousEntry = book.entries[book.entries.length - 1];
-
-      if (previousEntry) {
-        previousEntry.note = entry.content;
-        return;
+        result.push(book);
       }
 
-      throw new Error("Note was not preceded by a highlight");
-    }
+      if (entry.type === EntryType.Note) {
+        const previousEntry = book.entries[book.entries.length - 1];
 
-    book.entries.push({
-      content: entry.content,
-      type: entry.type,
-      page: entry.page,
-      location: entry.location,
+        if (previousEntry) {
+          previousEntry.note = entry.content;
+          return;
+        }
+
+        throw new Error("Note was not preceded by a highlight");
+      }
+
+      book.entries.push({
+        content: entry.content,
+        type: entry.type,
+        page: entry.page,
+        location: entry.location,
+      });
     });
-  });
 
   return result;
 }

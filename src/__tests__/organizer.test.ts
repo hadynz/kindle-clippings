@@ -151,11 +151,12 @@ describe("organizeKindleEntriesByBooks", () => {
       "Elantris: Tenth Anniversary Author's Definitive Edition"
     );
     expect(firstBook.entries).toHaveLength(3);
+    expect(firstBook.entries[0].location).toBe('398')
+    expect(firstBook.entries[1].location).toBe('481')
 
     expect(secondBook.title).toBe("1984");
-    expect(secondBook.entries).toHaveLength(2);
-    expect(secondBook.entries[0].note).toBeUndefined();
-    expect(secondBook.entries[1].note).toBe(
+    expect(secondBook.entries).toHaveLength(1); // Duplicate highlights on location are stripped
+    expect(secondBook.entries[0].note).toBe(
       "Airplane Accidents - also how software projects go wrong"
     );
   });

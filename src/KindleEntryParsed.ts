@@ -142,7 +142,7 @@ export class KindleEntryParsed {
       );
     }
     const location: string = matchLocation[0];
-    return location;
+    return location?.replace(/-.*/, "");
   }
 
   parseDateOfCreation(dateMetadata: string) {
