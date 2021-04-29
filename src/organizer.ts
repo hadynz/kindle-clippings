@@ -1,4 +1,3 @@
-import { relative } from "node:path";
 import { EntryType, KindleEntryParsed } from "./KindleEntryParsed";
 
 /**
@@ -73,7 +72,7 @@ export function organizeKindleEntriesByAuthors(
   return newKindleEntriesOrganized;
 }
 
-type Entry = {
+export type Entry = {
   content: string;
   type: EntryType;
   page: string;
@@ -81,7 +80,7 @@ type Entry = {
   note?: string;
 };
 
-type Book = {
+export type Book = {
   title: string;
   author: string;
   entries: Entry[];
