@@ -39,8 +39,14 @@ export function parseKindleEntries(
 ): Array<KindleEntryParsed> {
   const kindleEntriesParsed: Array<KindleEntryParsed> = [];
 
-  kindleEntries.forEach(entry => {
-    kindleEntriesParsed.push(new KindleEntryParsed(entry));
+  kindleEntries.forEach((entry) => {
+    try {
+      kindleEntriesParsed.push(new KindleEntryParsed(entry));
+    } catch (error) {
+      console.error("Could not parse entry in clippings file", entry);
+      throw new Error(error);
+    }
   });
+
   return kindleEntriesParsed;
 }

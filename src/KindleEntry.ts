@@ -23,10 +23,12 @@ export class KindleEntry {
     /*
       0  -> title
       1  -> metadata 
-      2  -> blank
-      3+ -> content
+      2+ -> content
       */
-    const [title, metadata, , ...content] = clipp;
+    const [title, metadata, ...content] = clipp.filter(
+      (el) => el.trim() !== ""
+    );
+
     return new KindleEntry(title, metadata, content.join("\n"));
   }
 
