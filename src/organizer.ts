@@ -58,7 +58,10 @@ export function organizeKindleEntriesByBooks(
           return;
         }
 
-        throw new Error("Note was not preceded by a highlight");
+        console.warn(
+          "Note was not preceded by highlight. Skipping",
+          entry.content
+        );
       }
 
       book.entries.push({
