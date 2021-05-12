@@ -88,6 +88,18 @@ const sampleEntries: Array<DataEntry> = [
     dateOfCreation: "Added on Saturday, 23 December 2017 09:46:53",
     type: EntryType.Highlight,
   },
+  {
+    entry: new KindleEntry(
+      "如何使用 Knotes",
+      "- 您在第 1 页（位置 #1-1）的标注 | 添加于 2017年11月13日星期一 上午9:00:00",
+      "📖 功能栏位于左上方"
+    ),
+    titleParsed: "如何使用 Knotes",
+    location: "1",
+    dateOfCreation: "添加于 2017年11月13日星期一 上午9:00:00",
+    type: EntryType.Highlight,
+  },
+
 ];
 
 // eslint-disable-next-line no-undef
@@ -119,7 +131,7 @@ describe("KindleEntryParsed", () => {
         );
 
         // Act
-        kindleParsed.parseBook();
+        kindleParsed.parseBookTitle();
 
         // Assert
         expect(kindleParsed.bookTitle).toBe(sampleEntry.titleParsed);
