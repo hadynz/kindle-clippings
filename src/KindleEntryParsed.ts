@@ -3,9 +3,9 @@ import { KindleEntry } from "./KindleEntry";
 const LocationRegex = Object.freeze(/\d+-?\d*/);
 
 export const EntryTypeTranslations = Object.freeze({
-  NOTE: ["note", "nota"],
+  NOTE: ["note", "nota", "的笔记"],
   HIGHLIGHT: ["highlight", "subrayado", "surlignement", "的标注"],
-  BOOKMARK: ["bookmark", "marcador", "signet"],
+  BOOKMARK: ["bookmark", "marcador", "signet", "的书签"],
 });
 
 export enum EntryType {
