@@ -4,7 +4,7 @@ const LocationRegex = Object.freeze(/\d+-?\d*/);
 
 export const EntryTypeTranslations = Object.freeze({
   NOTE: ["note", "nota"],
-  HIGHLIGHT: ["highlight", "subrayado", "surlignement"],
+  HIGHLIGHT: ["highlight", "subrayado", "surlignement", "的标注"],
   BOOKMARK: ["bookmark", "marcador", "signet"],
 });
 
@@ -132,10 +132,8 @@ export class KindleEntryParsed {
   }
 
   parseLocation(locationMetadata: string) {
-    const matchLocation:
-      | RegExpExecArray
-      | null
-      | undefined = LocationRegex.exec(locationMetadata);
+    const matchLocation: RegExpExecArray | null | undefined =
+      LocationRegex.exec(locationMetadata);
     if (!matchLocation) {
       throw new Error(
         `Can't parse location from locationMetadataStr: ${locationMetadata}`
@@ -151,45 +149,30 @@ export class KindleEntryParsed {
 
   parseEntryType(pageMetadata: string): EntryType {
     const pageMetaddataLowerCase: string = pageMetadata.toLowerCase();
-    let isTypeNote: boolean = false;
-    let isTypeHighlight: boolean = false;
-    let isTypeBookmark: boolean = false;
-    for (const noteTranslation of EntryTypeTranslations.NOTE) {
-      if (pageMetaddataLowerCase.includes(noteTranslation)) {
-        isTypeNote = true;
-        break;
-      }
-    }
+
+    const isTypeNote = EntryTypeTranslations.NOTE.some((token) =>
+      pageMetaddataLowerCase.includes(token)
+    );
+
+    const isTypeHighlight = EntryTypeTranslations.HIGHLIGHT.some((token) =>
+      pageMetaddataLowerCase.includes(token)
+    );
+
+    const isTypeBookmark = EntryTypeTranslations.BOOKMARK.some((token) =>
+      pageMetaddataLowerCase.includes(token)
+    );
 
     if (isTypeNote) {
       return EntryType.Note;
-    }
-
-    for (const highlightTranslation of EntryTypeTranslations.HIGHLIGHT) {
-      if (pageMetaddataLowerCase.includes(highlightTranslation)) {
-        isTypeHighlight = true;
-        break;
-      }
-    }
-
-    if (isTypeHighlight) {
+    } else if (isTypeHighlight) {
       return EntryType.Highlight;
-    }
-
-    for (const bookMarkTranslation of EntryTypeTranslations.BOOKMARK) {
-      if (pageMetaddataLowerCase.includes(bookMarkTranslation)) {
-        isTypeBookmark = true;
-        break;
-      }
-    }
-
-    if (isTypeBookmark) {
+    } else if (isTypeBookmark) {
       return EntryType.Bookmark;
-    } else {
-      throw new Error(
-        `Couldn't parse type of Entry: pageMetadataStr: ${pageMetadata}`
-      );
     }
+
+    throw new Error(
+      `Couldn't parse type of Entry: pageMetadataStr: ${pageMetadata}`
+    );
   }
 
   toJSON() {
