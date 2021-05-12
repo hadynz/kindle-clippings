@@ -3,9 +3,9 @@ import { KindleEntry } from "./KindleEntry";
 const LocationRegex = Object.freeze(/\d+-?\d*/);
 
 export const EntryTypeTranslations = Object.freeze({
-  NOTE: ["note", "nota"],
-  HIGHLIGHT: ["highlight", "subrayado", "surlignement"],
-  BOOKMARK: ["bookmark", "marcador", "signet"],
+  NOTE: ["note", "nota", "的笔记"],
+  HIGHLIGHT: ["highlight", "subrayado", "surlignement", "的标注"],
+  BOOKMARK: ["bookmark", "marcador", "signet", "的书签"],
 });
 
 export enum EntryType {
@@ -26,17 +26,20 @@ export class KindleEntryParsed {
 
   constructor(kindleEntry: KindleEntry) {
     this.kindleEntry = kindleEntry;
-    if (kindleEntry.contentClipp.length === 0) {
+
+    this.parseAuthor();
+    this.parseBookTitle();
+    this.parseMetadata();
+    this.parseContent();
+  }
+
+  parseContent(): void {
+    if (this.kindleEntry.contentClipp.length === 0) {
+      this.content = "No content";
+    } else if (this.type === EntryType.Bookmark) {
       this.content = "No content";
     } else {
-      this.content = kindleEntry.contentClipp;
-    }
-    this.parseAuthor();
-    this.parseBook();
-    this.parseMetadata();
-    if (this.type === EntryType.Bookmark) {
-      // Add placeholer for the content
-      this.content = "No content";
+      this.content = this.kindleEntry.contentClipp;
     }
   }
 
@@ -51,7 +54,7 @@ export class KindleEntryParsed {
     }
   }
 
-  parseBook() {
+  parseBookTitle() {
     const bookTitleAndAuthors: string = this.kindleEntry.bookTitleAndAuthors;
 
     const matches = bookTitleAndAuthors.match(/.*\(([^)]+)\)$/);
@@ -70,52 +73,29 @@ export class KindleEntryParsed {
   }
 
   parseMetadata() {
-    const metadata = this.kindleEntry.metdataClipp;
-    const indexOfFirstSeparator = metadata.indexOf("|");
-    const indexOfSecondSeparator = metadata.indexOf(
-      "|",
-      indexOfFirstSeparator + 1
-    );
+    const sections = this.kindleEntry.metdataClipp
+      .split("|")
+      .map((s) => s.trim());
 
-    const hasPageMetadata = indexOfSecondSeparator !== -1;
-
-    let pageMetadata: string;
-    let locationMetadata: string;
-    let dateOfCreation: string;
-
-    if (indexOfFirstSeparator === -1) {
-      throw new Error(`Could not parse metadata of: ${metadata}`);
+    if (sections.length === 0) {
+      throw new Error(
+        `Could not parse metadata of: ${this.kindleEntry.metdataClipp}`
+      );
     }
 
-    // Obtaining separated strings
-    if (!hasPageMetadata) {
-      // Doesnt have page count
-      locationMetadata = metadata.substring(0, indexOfFirstSeparator).trim();
-      dateOfCreation = metadata.substring(indexOfFirstSeparator + 1).trim();
-    } else {
-      pageMetadata = metadata.substring(0, indexOfFirstSeparator).trim();
-      locationMetadata = metadata
-        .substring(indexOfFirstSeparator + 1, indexOfSecondSeparator)
-        .trim();
-      dateOfCreation = metadata.substring(indexOfSecondSeparator + 1).trim();
+    if (sections.length === 3) {
+      const pageSection = sections.shift();
+      this.page = this.parsePage(pageSection);
+      this.type = this.parseEntryType(pageSection);
     }
 
-    // Page parsing
-    if (hasPageMetadata) {
-      this.page = this.parsePage(pageMetadata);
-    }
+    const [locationSection, dateSection] = sections;
 
-    // location parsing
-    this.location = this.parseLocation(locationMetadata);
+    this.location = this.parseLocation(locationSection);
+    this.dateOfCreation = this.parseDateOfCreation(dateSection);
 
-    // Date of creation parsing
-    this.dateOfCreation = this.parseDateOfCreation(dateOfCreation);
-
-    // Type of entry parsing
-    if (hasPageMetadata) {
-      this.type = this.parseEntryType(pageMetadata);
-    } else {
-      this.type = this.parseEntryType(locationMetadata);
+    if (!this.type) {
+      this.type = this.parseEntryType(locationSection);
     }
   }
 
@@ -132,10 +112,8 @@ export class KindleEntryParsed {
   }
 
   parseLocation(locationMetadata: string) {
-    const matchLocation:
-      | RegExpExecArray
-      | null
-      | undefined = LocationRegex.exec(locationMetadata);
+    const matchLocation: RegExpExecArray | null | undefined =
+      LocationRegex.exec(locationMetadata);
     if (!matchLocation) {
       throw new Error(
         `Can't parse location from locationMetadataStr: ${locationMetadata}`
@@ -151,45 +129,30 @@ export class KindleEntryParsed {
 
   parseEntryType(pageMetadata: string): EntryType {
     const pageMetaddataLowerCase: string = pageMetadata.toLowerCase();
-    let isTypeNote: boolean = false;
-    let isTypeHighlight: boolean = false;
-    let isTypeBookmark: boolean = false;
-    for (const noteTranslation of EntryTypeTranslations.NOTE) {
-      if (pageMetaddataLowerCase.includes(noteTranslation)) {
-        isTypeNote = true;
-        break;
-      }
-    }
+
+    const isTypeNote = EntryTypeTranslations.NOTE.some((token) =>
+      pageMetaddataLowerCase.includes(token)
+    );
+
+    const isTypeHighlight = EntryTypeTranslations.HIGHLIGHT.some((token) =>
+      pageMetaddataLowerCase.includes(token)
+    );
+
+    const isTypeBookmark = EntryTypeTranslations.BOOKMARK.some((token) =>
+      pageMetaddataLowerCase.includes(token)
+    );
 
     if (isTypeNote) {
       return EntryType.Note;
-    }
-
-    for (const highlightTranslation of EntryTypeTranslations.HIGHLIGHT) {
-      if (pageMetaddataLowerCase.includes(highlightTranslation)) {
-        isTypeHighlight = true;
-        break;
-      }
-    }
-
-    if (isTypeHighlight) {
+    } else if (isTypeHighlight) {
       return EntryType.Highlight;
-    }
-
-    for (const bookMarkTranslation of EntryTypeTranslations.BOOKMARK) {
-      if (pageMetaddataLowerCase.includes(bookMarkTranslation)) {
-        isTypeBookmark = true;
-        break;
-      }
-    }
-
-    if (isTypeBookmark) {
+    } else if (isTypeBookmark) {
       return EntryType.Bookmark;
-    } else {
-      throw new Error(
-        `Couldn't parse type of Entry: pageMetadataStr: ${pageMetadata}`
-      );
     }
+
+    throw new Error(
+      `Couldn't parse type of Entry: pageMetadataStr: ${pageMetadata}`
+    );
   }
 
   toJSON() {
