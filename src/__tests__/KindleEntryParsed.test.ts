@@ -1,17 +1,32 @@
 import { KindleEntry } from "../KindleEntry";
 import { KindleEntryParsed, EntryType } from "../KindleEntryParsed";
 
-interface DataEntry {
+interface TestData {
   entry: KindleEntry;
   titleParsed: string;
   author?: string;
   page?: string;
-  location: string;
+  location?: string;
   dateOfCreation: string;
   type: EntryType;
 }
 
-const sampleEntries: Array<DataEntry> = [
+const textFixtures: TestData[] = [
+  {
+    entry: new KindleEntry(
+      "The Effective Manager (Horstman, Mark)",
+      "- Your Highlight on page ix | location 247-248 | Added on Sunday, 18 February 2018 22:30:47",
+      "It's about getting the most out of your direct reports,"
+    ),
+    titleParsed: "The Effective Manager",
+    author: "Horstman, Mark",
+    page: "ix",
+    location: "247",
+    dateOfCreation: "Added on Sunday, 18 February 2018 22:30:47",
+    type: EntryType.Highlight,
+  },
+
+  
   {
     entry: new KindleEntry(
       "非オタの彼女が俺の持ってるエロゲに興味津々なんだが…… (滝沢　慧;睦茸)",
@@ -84,7 +99,7 @@ const sampleEntries: Array<DataEntry> = [
       "Given the right circumstances, every human being on this earth would be willing to commit evil.'"
     ),
     titleParsed: "paulo-coehlo-the-devil-and-miss-prym",
-    location: "14",
+    page: "14",
     dateOfCreation: "Added on Saturday, 23 December 2017 09:46:53",
     type: EntryType.Highlight,
   },
@@ -95,110 +110,89 @@ const sampleEntries: Array<DataEntry> = [
       "📖 功能栏位于左上方"
     ),
     titleParsed: "如何使用 Knotes",
-    location: "1",
+    page: "1",
     dateOfCreation: "添加于 2017年11月13日星期一 上午9:00:00",
     type: EntryType.Highlight,
   },
-
+  {
+    entry: new KindleEntry(
+      "The Bogleheads' Guide to Investing - Taylor Larimore.pdf",
+      "- Your Highlight on page xvi-xvi | Added on Monday, April 18, 2016 7:28:27 AM",
+      "our financial markets are essentially closed systems in which an advantage garnered by a given investor comes at the disadvantage of the other investors in the same market"
+    ),
+    titleParsed: "The Bogleheads' Guide to Investing - Taylor Larimore.pdf",
+    page: "xvi",
+    dateOfCreation: "Added on Monday, April 18, 2016 7:28:27 AM",
+    type: EntryType.Highlight,
+  },
+  {
+    entry: new KindleEntry(
+      "Garota exemplar (Flynn, Gillian)",
+      "- Seu destaque ou posição 2829-2829 | Adicionado: sexta-feira, 29 de novembro de 2019 18:00:13",
+      "Na verdade, queria que ela lesse minha mente para eu não ter de me rebaixar à arte feminina da articulação."
+    ),
+    titleParsed: "Garota exemplar",
+    author: "Flynn, Gillian",
+    location: "2829",
+    dateOfCreation: "Adicionado: sexta-feira, 29 de novembro de 2019 18:00:13",
+    type: EntryType.Highlight,
+  },
+  {
+    entry: new KindleEntry(
+      "Your Money or Your Life (Vicki Robin)",
+      "-  La tua evidenziazione alla posizione 453-454 | Aggiunto in data lunedì 8 marzo 2021 22:52:57",
+      "There is a way to approach life so that when asked, “Your money or your life?” you say, “I’ll take both, thank you.”"
+    ),
+    titleParsed: "Your Money or Your Life",
+    author: "Vicki Robin",
+    location: "453",
+    dateOfCreation: "Aggiunto in data lunedì 8 marzo 2021 22:52:57",
+    type: EntryType.Highlight,
+  },
+  {
+    entry: new KindleEntry(
+      "Outliers (Gladwell, Malcolm)",
+      "- Your Note at location 1971 | Added on Wednesday, 6 January 2021 14:22:58",
+      "Airplane Accidents - also how software projects go wrong"
+    ),
+    titleParsed: "Outliers",
+    author: "Gladwell, Malcolm",
+    location: "1971",
+    dateOfCreation: "Added on Wednesday, 6 January 2021 14:22:58",
+    type: EntryType.Note,
+  },
+  {
+    entry: new KindleEntry(
+      "The Effective Manager (Horstman, Mark)",
+      "- Your Bookmark on page 136 | location 2543 | Added on Monday, 26 February 2018 11:00:31",
+      ""
+    ),
+    titleParsed: "The Effective Manager",
+    author: "Horstman, Mark",
+    location: "2543",
+    page: "136",
+    dateOfCreation: "Added on Monday, 26 February 2018 11:00:31",
+    type: EntryType.Bookmark,
+  },
 ];
 
-// eslint-disable-next-line no-undef
 describe("KindleEntryParsed", () => {
-  describe("parseAuthor", () => {
-    test("Obtains author", () => {
-      // AAA
-      sampleEntries.forEach((sampleEntry) => {
-        // Arrange
-        const kindleParsed: KindleEntryParsed = new KindleEntryParsed(
-          sampleEntry.entry
-        );
+  const t = textFixtures.map((entry) =>
+    Object.assign(entry, {
+      toString: () => {
+        return entry.titleParsed;
+      },
+    })
+  );
 
-        // Act
-        kindleParsed.parseAuthor();
+  test.each(t)("Parse MyClippings entry '%s'", (expected: TestData) => {
+    const actual = new KindleEntryParsed(expected.entry);
 
-        // Assert
-        expect(kindleParsed.authors).toBe(sampleEntry.author);
-      });
-    });
-  });
-
-  describe("parseBook", () => {
-    test("Obtains book title", () => {
-      sampleEntries.forEach((sampleEntry) => {
-        // Arrange
-        const kindleParsed: KindleEntryParsed = new KindleEntryParsed(
-          sampleEntry.entry
-        );
-
-        // Act
-        kindleParsed.parseBookTitle();
-
-        // Assert
-        expect(kindleParsed.bookTitle).toBe(sampleEntry.titleParsed);
-      });
-    });
-  });
-
-  describe("parseEntryType", () => {
-    test("Obtains correct entry type", () => {
-      sampleEntries.forEach((sampleEntry) => {
-        // Arrange
-        const kindleParsed: KindleEntryParsed = new KindleEntryParsed(
-          sampleEntry.entry
-        );
-
-        // Act
-        let entryTypeObtained: EntryType = kindleParsed.parseEntryType(
-          sampleEntry.entry.metdataClipp
-        );
-
-        // Assert
-        expect(entryTypeObtained).toBe(sampleEntry.type);
-      });
-    });
-  });
-
-  describe("parseMetadata", () => {
-    test("Obtains correct page", () => {
-      sampleEntries.forEach((sampleEntry) => {
-        // Arrange
-        const kindleParsed: KindleEntryParsed = new KindleEntryParsed(
-          sampleEntry.entry
-        );
-        // Act
-        kindleParsed.parseMetadata();
-
-        // Assert
-        expect(kindleParsed.page).toBe(sampleEntry.page);
-      });
-    });
-
-    test("Obtains correct location", () => {
-      sampleEntries.forEach((sampleEntry) => {
-        // Arrange
-        const kindleParsed: KindleEntryParsed = new KindleEntryParsed(
-          sampleEntry.entry
-        );
-        // Act
-        kindleParsed.parseMetadata();
-
-        // Assert
-        expect(kindleParsed.location).toBe(sampleEntry.location);
-      });
-    });
-
-    test("Obtains correct date of creation", () => {
-      sampleEntries.forEach((sampleEntry) => {
-        // Arrange
-        const kindleParsed: KindleEntryParsed = new KindleEntryParsed(
-          sampleEntry.entry
-        );
-        // Act
-        kindleParsed.parseMetadata();
-
-        // Assert
-        expect(kindleParsed.dateOfCreation).toBe(sampleEntry.dateOfCreation);
-      });
-    });
+    expect(actual.bookTitle).toBe(expected.titleParsed);
+    expect(actual.authors).toBe(expected.author);
+    expect(actual.page).toBe(expected.page);
+    expect(actual.location).toBe(expected.location);
+    expect(actual.dateOfCreation).toBe(expected.dateOfCreation);
+    expect(actual.type).toBe(expected.type);
   });
 });
