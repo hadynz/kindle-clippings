@@ -1,10 +1,15 @@
 import { KindleEntry } from "./KindleEntry";
 
-const LocationRegex = Object.freeze(/\d+-?\d*/);
-
 export const EntryTypeTranslations = Object.freeze({
   NOTE: ["note", "nota", "的笔记"],
-  HIGHLIGHT: ["highlight", "subrayado", "surlignement", "的标注"],
+  HIGHLIGHT: [
+    "highlight",
+    "subrayado", // Spanish
+    "surlignement", // French
+    "的标注", // Chinese
+    "destaque", // Portugese
+    "evidenziazione", // Italian
+  ],
   BOOKMARK: ["bookmark", "marcador", "signet", "的书签"],
 });
 
@@ -12,6 +17,7 @@ export enum EntryType {
   Note = "NOTE",
   Highlight = "HIGHLIGHT",
   Bookmark = "BOOKMARK",
+  Unknown = "UNKNOWN",
 }
 
 export class KindleEntryParsed {
@@ -77,50 +83,57 @@ export class KindleEntryParsed {
       .split("|")
       .map((s) => s.trim());
 
-    if (sections.length === 0) {
+    // There must always be at least two sections spearated by pipes
+    if (sections.length < 2) {
       throw new Error(
-        `Could not parse metadata of: ${this.kindleEntry.metdataClipp}`
+        `Invalid metadata entry. Expected a page and/or location and created date entry: ${this.kindleEntry.metdataClipp}`
       );
     }
 
-    if (sections.length === 3) {
-      const pageSection = sections.shift();
-      this.page = this.parsePage(pageSection);
-      this.type = this.parseEntryType(pageSection);
-    }
+    // Type of entry is always defined in the first section
+    this.type = this.parseEntryType(sections[0]);
 
-    const [locationSection, dateSection] = sections;
-
-    this.location = this.parseLocation(locationSection);
-    this.dateOfCreation = this.parseDateOfCreation(dateSection);
-
-    if (!this.type) {
-      this.type = this.parseEntryType(locationSection);
-    }
-  }
-
-  parsePage(pageMetadata: string) {
-    const matches = pageMetadata.match(/^.* (.*)$/);
-
-    if (matches) {
-      return matches[1];
-    }
-
-    throw new Error(
-      `Can't parse page number from pageMetadataStr: ${pageMetadata}`
+    // Date of creation is always defined in the last section
+    this.dateOfCreation = this.parseDateOfCreation(
+      sections[sections.length - 1]
     );
+
+    /**
+     * If author is not, this is a non-Amazon book. Only page will be
+     * set. Location is only available for Amazon purchased books
+     */
+    if (this.authors === undefined) {
+      if (sections.length !== 2) {
+        throw new Error(
+          `Invalid metadata entry. Two sections only must always exist when author is not set: ${this.kindleEntry.metdataClipp}`
+        );
+      }
+
+      this.page = this.parseSectionForNumber(sections[0]);
+    } else {
+      if (sections.length === 3) {
+        const pageSection = sections.shift();
+        this.page = this.parseSectionForNumber(pageSection);
+      }
+
+      this.location = this.parseSectionForNumber(sections[0]);
+    }
   }
 
-  parseLocation(locationMetadata: string) {
-    const matchLocation: RegExpExecArray | null | undefined =
-      LocationRegex.exec(locationMetadata);
-    if (!matchLocation) {
-      throw new Error(
-        `Can't parse location from locationMetadataStr: ${locationMetadata}`
-      );
+  parseSectionForNumber(section: string) {
+    // If string has any standalone numbers, the first occurence will be a valid page number
+    const matches1 = section.match(/(\d+)/);
+    if (matches1) {
+      return matches1[0];
     }
-    const location: string = matchLocation[0];
-    return location?.replace(/-.*/, "");
+
+    // Return the last word in the sentence. Works for roman literals (e.g. "... on page ix")
+    const matches2 = section.match(/^.* (.*)$/);
+    if (matches2) {
+      return matches2[1].replace(/-.*/, "");
+    }
+
+    throw new Error(`Can't parse page number from pageMetadataStr: ${section}`);
   }
 
   parseDateOfCreation(dateMetadata: string) {
@@ -149,21 +162,6 @@ export class KindleEntryParsed {
     } else if (isTypeBookmark) {
       return EntryType.Bookmark;
     }
-
-    throw new Error(
-      `Couldn't parse type of Entry: pageMetadataStr: ${pageMetadata}`
-    );
-  }
-
-  toJSON() {
-    return {
-      authors: this.authors,
-      bookTile: this.bookTitle,
-      page: this.page,
-      location: this.location,
-      dateOfCreation: this.dateOfCreation,
-      content: this.content,
-      type: this.type,
-    };
+    return EntryType.Unknown;
   }
 }
