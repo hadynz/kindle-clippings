@@ -26,7 +26,6 @@ const textFixtures: TestData[] = [
     type: EntryType.Highlight,
   },
 
-  
   {
     entry: new KindleEntry(
       "非オタの彼女が俺の持ってるエロゲに興味津々なんだが…… (滝沢　慧;睦茸)",
@@ -173,6 +172,30 @@ const textFixtures: TestData[] = [
     page: "136",
     dateOfCreation: "Added on Monday, 26 February 2018 11:00:31",
     type: EntryType.Bookmark,
+  },
+  {
+    entry: new KindleEntry(
+      "Your P2K Articles (2021-04-02) (P2K)",
+      "-  La tua evidenziazione alla posizione 72-73 | Aggiunto in data lunedì 5 aprile 2021 23:14:27",
+      "You likely have a long list of things you want to accomplish in life. But when everything is a priority, nothing is a priority."
+    ),
+    titleParsed: "Your P2K Articles (2021-04-02)",
+    author: "P2K",
+    location: "72",
+    dateOfCreation: "Aggiunto in data lunedì 5 aprile 2021 23:14:27",
+    type: EntryType.Highlight,
+  },
+  {
+    entry: new KindleEntry(
+      "The Big Book of Science Fiction",
+      "- Your Highlight on page 1 | Location 755-756 | Added on Monday, October 19, 2020 7:32:56 PM",
+      "Wells found such stunts from his rival annoying and was less interested in whether a mecha-elephant could actually clomp and clank across the earth"
+    ),
+    titleParsed: "The Big Book of Science Fiction",
+    page: "1",
+    location: "755",
+    dateOfCreation: "Added on Monday, October 19, 2020 7:32:56 PM",
+    type: EntryType.Highlight,
   },
 ];
 
