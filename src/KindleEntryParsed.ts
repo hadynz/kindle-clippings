@@ -83,7 +83,7 @@ export class KindleEntryParsed {
       .split("|")
       .map((s) => s.trim());
 
-    // There must always be at least two sections spearated by pipes
+    // There must always be at least two sections separated by pipes
     if (sections.length < 2) {
       throw new Error(
         `Invalid metadata entry. Expected a page and/or location and created date entry: ${this.kindleEntry.metdataClipp}`
@@ -98,24 +98,13 @@ export class KindleEntryParsed {
       sections[sections.length - 1]
     );
 
-    /**
-     * If author is not, this is a non-Amazon book. Only page will be
-     * set. Location is only available for Amazon purchased books
-     */
-    if (this.authors === undefined) {
-      if (sections.length !== 2) {
-        throw new Error(
-          `Invalid metadata entry. Two sections only must always exist when author is not set: ${this.kindleEntry.metdataClipp}`
-        );
-      }
-
+    if (sections.length === 3) {
+      this.page = this.parseSectionForNumber(sections[0]);
+      this.location = this.parseSectionForNumber(sections[1]);
+    } // When author is not set, it is not an Amazon book and page will only be available
+    else if (this.authors === undefined) {
       this.page = this.parseSectionForNumber(sections[0]);
     } else {
-      if (sections.length === 3) {
-        const pageSection = sections.shift();
-        this.page = this.parseSectionForNumber(pageSection);
-      }
-
       this.location = this.parseSectionForNumber(sections[0]);
     }
   }
