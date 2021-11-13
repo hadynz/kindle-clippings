@@ -9,12 +9,9 @@
     "removeComments": false,
     "preserveConstEnums": true,
     "sourceMap": true,
-    "outDir": "dist",
     "esModuleInterop": true,
-    "declaration": true,
-    "declarationDir": "dist",
-    "declarationMap": true
+    "declaration": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "src/__tests__/*"]
+  "exclude": ["node_modules", "src/**/*.spec.ts", "src/cli.ts"]
 }
