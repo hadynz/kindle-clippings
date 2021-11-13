@@ -1,17 +1,21 @@
-import fs from "fs";
+import fs from 'fs';
 
-import { readKindleClipping } from ".";
-import { parseKindleEntries } from "./parser";
-import { organizeKindleEntriesByBooks } from "./organizer";
+import { readMyClippingsFile } from '.';
+import { groupToBooks } from './parsers/bookParser';
 
-(async (): Promise<void> => {
-  const file = "/Users/hady.osman/Desktop/My Clippings (hady).txt";
-  console.log("file", file);
+const run = async (): Promise<void> => {
+  const file = '/Users/hady.osman/Desktop/My Clippings (hady).txt';
 
-  const clippingsFileContent = fs.readFileSync(file, "utf8");
+  // tslint:disable-next-line: no-console
+  console.log('file', file);
 
-  const rawRows = readKindleClipping(clippingsFileContent);
-  const parsedEntries = parseKindleEntries(rawRows);
-  const books = organizeKindleEntriesByBooks(parsedEntries);
+  const clippingsFileContent = fs.readFileSync(file, 'utf8');
+
+  const parsedBlocks = readMyClippingsFile(clippingsFileContent);
+  const books = groupToBooks(parsedBlocks);
+
+  // tslint:disable-next-line: no-console
   console.log(books);
-})();
+};
+
+run();
