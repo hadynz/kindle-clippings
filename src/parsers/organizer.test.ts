@@ -1,37 +1,37 @@
-import { KindleEntry } from '../KindleEntry';
-import { KindleEntryParsed } from '../KindleEntryParsed';
-import { organizeKindleEntriesByBooks } from '../organizer';
+import { RawBlock } from '../blocks/RawBlock';
+import { ParsedBlock } from '../blocks/ParsedBlock';
+import { organizeKindleEntriesByBooks } from './organizer';
 
 describe('organizeKindleEntriesByBooks', () => {
-  it('groups by books', () => {
-    const standardMyClippings: KindleEntry[] = [
-      new KindleEntry(
+  it('organises books by default', () => {
+    const rawBlocks: RawBlock[] = [
+      new RawBlock(
         "Elantris: Tenth Anniversary Author's Definitive Edition (Sanderson, Brandon)",
         '- Your Highlight on page 27 | location 398-399 | Added on Thursday, 24 August 2017 22:31:50',
         '—anything to keep from acknowledging what she was: a lanky, brusque'
       ),
-      new KindleEntry(
+      new RawBlock(
         "Elantris: Tenth Anniversary Author's Definitive Edition (Sanderson, Brandon)",
         '- Your Highlight on page 30 | location 481-484 | Added on Thursday, 24 August 2017 23:34:25',
         'Sarene took a calming breath, telling herself to be patient. She couldn’t blame the queen for being the way she was; Domi taught that all people’s personalities were gifts to be enjoyed. The queen was charming, in her own meandering way. Unfortunately, after meeting both king and queen, Sarene was beginning to suspect that she would have trouble finding political allies in Arelon.'
       ),
-      new KindleEntry(
+      new RawBlock(
         "Elantris: Tenth Anniversary Author's Definitive Edition (Sanderson, Brandon)",
         '- Your Highlight on page 31 | location 483-484 | Added on Thursday, 24 August 2017 23:34:29',
         'Arelon. Something else bothered Sarene—something'
       ),
-      new KindleEntry(
+      new RawBlock(
         '1984 (Orwell, George)',
         '- Your Highlight on page 41 | location 737-738 | Added on Saturday, 9 September 2017 13:27:00',
 
         'Don’t you see that the whole aim of Newspeak is to narrow the range of thought? In the end we shall make thoughtcrime literally impossible, because there will be no words in which to express'
       ),
-      new KindleEntry(
+      new RawBlock(
         '1984 (Orwell, George)',
         '- Your Highlight on page 41 | location 737-738 | Added on Saturday, 9 September 2017 13:27:09',
         '“Don’t you see that the whole aim of Newspeak is to narrow the range of thought? In the end we shall make thoughtcrime literally impossible, because there will be no words in which to express it.'
       ),
-      new KindleEntry(
+      new RawBlock(
         '1984 (Orwell, George)',
         '- Your Note at location 1971 | Added on Wednesday, 6 January 2021 14:22:58',
         'Airplane Accidents - also how software projects go wrong'
@@ -40,12 +40,12 @@ describe('organizeKindleEntriesByBooks', () => {
 
     // AAA
     // Arrange
-    const parsedEntries = standardMyClippings.map((sampleEntry) => {
-      return new KindleEntryParsed(sampleEntry);
+    const parsedBlocks = rawBlocks.map((rawBlock) => {
+      return new ParsedBlock(rawBlock);
     });
 
     // Act
-    const books = organizeKindleEntriesByBooks(parsedEntries);
+    const books = organizeKindleEntriesByBooks(parsedBlocks);
 
     // Assert
     const firstBook = books[0];

@@ -7,7 +7,7 @@
     "test": "npm run lint && jest",
     "build": "npm run clean && tsc",
     "clean": "rimraf dist",
-    "lint": "tslint -c tslint.json 'src/**/*.ts'",
+    "lint": "tslint -c tslint.json 'src/**/*.ts' && eslint .",
     "dev": "ts-node src/cli.ts"
   },
   "repository": {

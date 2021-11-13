@@ -1,4 +1,4 @@
-import { EntryType, KindleEntryParsed } from './KindleEntryParsed';
+import { EntryType, ParsedBlock } from '../blocks/ParsedBlock';
 
 export type Entry = {
   content: string;
@@ -19,7 +19,7 @@ export type Book = {
  * @param entriesParsed
  */
 export function organizeKindleEntriesByBooks(
-  entriesParsed: KindleEntryParsed[]
+  entriesParsed: ParsedBlock[]
 ): Book[] {
   const result: Book[] = [];
 
@@ -36,8 +36,8 @@ export function organizeKindleEntriesByBooks(
         return accumulator;
       }
       return [...accumulator, currentValue];
-    }, [] as KindleEntryParsed[])
-    .forEach((entry: KindleEntryParsed) => {
+    }, [] as ParsedBlock[])
+    .forEach((entry: ParsedBlock) => {
       let book = result.find((r) => r.title === entry.bookTitle) as Book;
 
       if (book == null) {

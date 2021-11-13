@@ -2,6 +2,11 @@
   "defaultSeverity": "error",
   "extends": ["tslint:recommended"],
   "jsRules": {},
-  "rules": {},
+  "rules": {
+    "no-console": {
+      "severity": "error",
+      "options": ["log", "debug", "info", "time", "timeEnd", "trace"]
+    }
+  },
   "rulesDirectory": []
 }

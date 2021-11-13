@@ -1,4 +1,4 @@
-import type { KindleEntry } from './KindleEntry';
+import type { RawBlock } from './RawBlock';
 
 export const EntryTypeTranslations = Object.freeze({
   NOTE: ['note', 'nota', '的笔记'],
@@ -15,8 +15,8 @@ export const EntryTypeTranslations = Object.freeze({
 
 export type EntryType = 'NOTE' | 'HIGHLIGHT' | 'BOOKMARK' | 'UNKNOWN';
 
-export class KindleEntryParsed {
-  private kindleEntry: KindleEntry;
+export class ParsedBlock {
+  private kindleEntry: RawBlock;
   public authors?: string;
   public bookTitle!: string;
   public page!: string;
@@ -25,7 +25,7 @@ export class KindleEntryParsed {
   public type!: EntryType;
   public content!: string;
 
-  constructor(kindleEntry: KindleEntry) {
+  constructor(kindleEntry: RawBlock) {
     this.kindleEntry = kindleEntry;
 
     this.parseAuthor();
@@ -35,17 +35,17 @@ export class KindleEntryParsed {
   }
 
   parseContent(): void {
-    if (this.kindleEntry.contentClipp.length === 0) {
+    if (this.kindleEntry.contentLines.length === 0) {
       this.content = 'No content';
     } else if (this.type === 'BOOKMARK') {
       this.content = 'No content';
     } else {
-      this.content = this.kindleEntry.contentClipp;
+      this.content = this.kindleEntry.contentLines;
     }
   }
 
   parseAuthor(): void {
-    const bookTitleAndAuthors: string = this.kindleEntry.bookTitleAndAuthors;
+    const bookTitleAndAuthors: string = this.kindleEntry.titleLine;
 
     const matches = bookTitleAndAuthors.match(/.*\(([^)]+)\)$/);
 
@@ -56,7 +56,7 @@ export class KindleEntryParsed {
   }
 
   parseBookTitle() {
-    const bookTitleAndAuthors: string = this.kindleEntry.bookTitleAndAuthors;
+    const bookTitleAndAuthors: string = this.kindleEntry.titleLine;
 
     const matches = bookTitleAndAuthors.match(/.*\(([^)]+)\)$/);
 
@@ -74,14 +74,14 @@ export class KindleEntryParsed {
   }
 
   parseMetadata() {
-    const sections = this.kindleEntry.metdataClipp
+    const sections = this.kindleEntry.metadataLine
       .split('|')
       .map((s) => s.trim());
 
     // There must always be at least two sections separated by pipes
     if (sections.length < 2) {
       throw new Error(
-        `Invalid metadata entry. Expected a page and/or location and created date entry: ${this.kindleEntry.metdataClipp}`
+        `Invalid metadata entry. Expected a page and/or location and created date entry: ${this.kindleEntry.metadataLine}`
       );
     }
 
