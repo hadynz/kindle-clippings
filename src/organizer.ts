@@ -10,16 +10,16 @@ export type Entry = {
 
 export type Book = {
   title: string;
-  author: string;
+  author?: string;
   entries: Entry[];
 };
 
 /**
- * Organize the data into an array of Books with embedded array of entiies
+ * Organize the data into an array of Books with embedded array of entities
  * @param entriesParsed
  */
 export function organizeKindleEntriesByBooks(
-  entriesParsed: Array<KindleEntryParsed>
+  entriesParsed: KindleEntryParsed[]
 ): Book[] {
   const result: Book[] = [];
 
@@ -36,11 +36,11 @@ export function organizeKindleEntriesByBooks(
         return accumulator;
       }
       return [...accumulator, currentValue];
-    }, [])
-    .forEach((entry) => {
-      let book: Book = result.find((r) => r.title === entry.bookTitle);
+    }, [] as KindleEntryParsed[])
+    .forEach((entry: KindleEntryParsed) => {
+      let book = result.find((r) => r.title === entry.bookTitle) as Book;
 
-      if (!book) {
+      if (book == null) {
         book = {
           title: entry.bookTitle,
           author: entry.authors,
@@ -50,7 +50,7 @@ export function organizeKindleEntriesByBooks(
         result.push(book);
       }
 
-      if (entry.type === EntryType.Note) {
+      if (entry.type === "NOTE") {
         const previousEntry = book.entries[book.entries.length - 1];
 
         if (previousEntry) {
@@ -58,6 +58,7 @@ export function organizeKindleEntriesByBooks(
           return;
         }
 
+        // tslint:disable-next-line: no-console
         console.warn(
           "Note was not preceded by highlight. Skipping",
           entry.content

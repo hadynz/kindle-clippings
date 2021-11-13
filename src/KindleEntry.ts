@@ -19,10 +19,10 @@ export class KindleEntry {
     return this._contentClipp;
   }
 
-  static createKindleClipp(clipp: Array<string>): KindleEntry {
+  static createKindleClipp(clipp: string[]): KindleEntry {
     /*
       0  -> title
-      1  -> metadata 
+      1  -> metadata
       2+ -> content
       */
     const [title, metadata, ...content] = clipp.filter(

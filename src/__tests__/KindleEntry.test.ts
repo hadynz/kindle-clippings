@@ -5,7 +5,7 @@ interface DataEntry {
   entry: KindleEntry;
 }
 
-const sampleEntries: Array<DataEntry> = [
+const sampleEntries: DataEntry[] = [
   {
     lines: [
       "1984 (Orwell, George)",

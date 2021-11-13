@@ -5,11 +5,12 @@ import { KindleEntryParsed } from "./KindleEntryParsed";
  * Read a string line by line returns an Array of KindleEntry
  * @param kindleClipping
  */
-export function readKindleClipping(kindleClipping: string): Array<KindleEntry> {
-  const buffer: Array<string> = [];
-  const kindleClipps: Array<KindleEntry> = [];
+export function readKindleClipping(kindleClipping: string): KindleEntry[] {
+  const buffer: string[] = [];
+  const kindleClipps: KindleEntry[] = [];
+  const lines: string[] = kindleClipping.split("\n");
+
   let totalLines: number = 0;
-  let lines: Array<string> = kindleClipping.split("\n");
 
   for (const line of lines) {
     try {
@@ -35,16 +36,18 @@ export function readKindleClipping(kindleClipping: string): Array<KindleEntry> {
  * @param kindleEntries
  */
 export function parseKindleEntries(
-  kindleEntries: Array<KindleEntry>
-): Array<KindleEntryParsed> {
-  const kindleEntriesParsed: Array<KindleEntryParsed> = [];
+  kindleEntries: KindleEntry[]
+): KindleEntryParsed[] {
+  const kindleEntriesParsed: KindleEntryParsed[] = [];
 
   kindleEntries.forEach((entry) => {
     try {
       kindleEntriesParsed.push(new KindleEntryParsed(entry));
     } catch (error) {
+      // tslint:disable-next-line: no-console
       console.error("Could not parse entry in clippings file", entry);
-      throw new Error(error);
+
+      throw error;
     }
   });
 

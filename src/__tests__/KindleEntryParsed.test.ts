@@ -23,7 +23,7 @@ const textFixtures: TestData[] = [
     page: "ix",
     location: "247",
     dateOfCreation: "Added on Sunday, 18 February 2018 22:30:47",
-    type: EntryType.Highlight,
+    type: "HIGHLIGHT",
   },
 
   {
@@ -37,7 +37,7 @@ const textFixtures: TestData[] = [
     page: "197",
     location: "2031",
     dateOfCreation: "Añadido el sábado, 12 de octubre de 2019 0:37:31",
-    type: EntryType.Highlight,
+    type: "HIGHLIGHT",
   },
   {
     entry: new KindleEntry(
@@ -50,7 +50,7 @@ const textFixtures: TestData[] = [
     page: "14",
     location: "182",
     dateOfCreation: "Añadido el lunes, 25 de noviembre de 2019 0:43:38",
-    type: EntryType.Highlight,
+    type: "HIGHLIGHT",
   },
   {
     entry: new KindleEntry(
@@ -63,7 +63,7 @@ const textFixtures: TestData[] = [
     author: "ＭＡＧＥＳ．;Ｃｈｉｙｏ ｓｔ．ｉｎｃ;梅原英司",
     location: "35",
     dateOfCreation: "Added on Monday, July 20, 2020 12:58:07 AM",
-    type: EntryType.Highlight,
+    type: "HIGHLIGHT",
   },
   {
     entry: new KindleEntry(
@@ -76,7 +76,7 @@ const textFixtures: TestData[] = [
     page: "200",
     location: "3054",
     dateOfCreation: "Ajouté le mercredi 16 août 2017 02:14:10",
-    type: EntryType.Highlight,
+    type: "HIGHLIGHT",
   },
   {
     entry: new KindleEntry(
@@ -89,7 +89,7 @@ const textFixtures: TestData[] = [
     page: "ix",
     location: "247",
     dateOfCreation: "Added on Sunday, 18 February 2018 22:30:47",
-    type: EntryType.Highlight,
+    type: "HIGHLIGHT",
   },
   {
     entry: new KindleEntry(
@@ -100,7 +100,7 @@ const textFixtures: TestData[] = [
     titleParsed: "paulo-coehlo-the-devil-and-miss-prym",
     page: "14",
     dateOfCreation: "Added on Saturday, 23 December 2017 09:46:53",
-    type: EntryType.Highlight,
+    type: "HIGHLIGHT",
   },
   {
     entry: new KindleEntry(
@@ -111,7 +111,7 @@ const textFixtures: TestData[] = [
     titleParsed: "如何使用 Knotes",
     page: "1",
     dateOfCreation: "添加于 2017年11月13日星期一 上午9:00:00",
-    type: EntryType.Highlight,
+    type: "HIGHLIGHT",
   },
   {
     entry: new KindleEntry(
@@ -122,7 +122,7 @@ const textFixtures: TestData[] = [
     titleParsed: "The Bogleheads' Guide to Investing - Taylor Larimore.pdf",
     page: "xvi",
     dateOfCreation: "Added on Monday, April 18, 2016 7:28:27 AM",
-    type: EntryType.Highlight,
+    type: "HIGHLIGHT",
   },
   {
     entry: new KindleEntry(
@@ -134,7 +134,7 @@ const textFixtures: TestData[] = [
     author: "Flynn, Gillian",
     location: "2829",
     dateOfCreation: "Adicionado: sexta-feira, 29 de novembro de 2019 18:00:13",
-    type: EntryType.Highlight,
+    type: "HIGHLIGHT",
   },
   {
     entry: new KindleEntry(
@@ -146,7 +146,7 @@ const textFixtures: TestData[] = [
     author: "Vicki Robin",
     location: "453",
     dateOfCreation: "Aggiunto in data lunedì 8 marzo 2021 22:52:57",
-    type: EntryType.Highlight,
+    type: "HIGHLIGHT",
   },
   {
     entry: new KindleEntry(
@@ -158,7 +158,7 @@ const textFixtures: TestData[] = [
     author: "Gladwell, Malcolm",
     location: "1971",
     dateOfCreation: "Added on Wednesday, 6 January 2021 14:22:58",
-    type: EntryType.Note,
+    type: "NOTE",
   },
   {
     entry: new KindleEntry(
@@ -171,7 +171,7 @@ const textFixtures: TestData[] = [
     location: "2543",
     page: "136",
     dateOfCreation: "Added on Monday, 26 February 2018 11:00:31",
-    type: EntryType.Bookmark,
+    type: "BOOKMARK",
   },
   {
     entry: new KindleEntry(
@@ -183,7 +183,7 @@ const textFixtures: TestData[] = [
     author: "P2K",
     location: "72",
     dateOfCreation: "Aggiunto in data lunedì 5 aprile 2021 23:14:27",
-    type: EntryType.Highlight,
+    type: "HIGHLIGHT",
   },
   {
     entry: new KindleEntry(
@@ -195,7 +195,7 @@ const textFixtures: TestData[] = [
     page: "1",
     location: "755",
     dateOfCreation: "Added on Monday, October 19, 2020 7:32:56 PM",
-    type: EntryType.Highlight,
+    type: "HIGHLIGHT",
   },
 ];
 

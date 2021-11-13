@@ -1,4 +1,4 @@
-import { KindleEntry } from "./KindleEntry";
+import type { KindleEntry } from "./KindleEntry";
 
 export const EntryTypeTranslations = Object.freeze({
   NOTE: ["note", "nota", "的笔记"],
@@ -13,22 +13,17 @@ export const EntryTypeTranslations = Object.freeze({
   BOOKMARK: ["bookmark", "marcador", "signet", "的书签"],
 });
 
-export enum EntryType {
-  Note = "NOTE",
-  Highlight = "HIGHLIGHT",
-  Bookmark = "BOOKMARK",
-  Unknown = "UNKNOWN",
-}
+export type EntryType = "NOTE" | "HIGHLIGHT" | "BOOKMARK" | "UNKNOWN";
 
 export class KindleEntryParsed {
   private kindleEntry: KindleEntry;
-  authors?: string;
-  bookTitle: string;
-  page: string;
-  location: string;
-  dateOfCreation: string;
-  type: EntryType;
-  content: string;
+  public authors?: string;
+  public bookTitle!: string;
+  public page!: string;
+  public location!: string;
+  public dateOfCreation!: string;
+  public type!: EntryType;
+  public content!: string;
 
   constructor(kindleEntry: KindleEntry) {
     this.kindleEntry = kindleEntry;
@@ -42,7 +37,7 @@ export class KindleEntryParsed {
   parseContent(): void {
     if (this.kindleEntry.contentClipp.length === 0) {
       this.content = "No content";
-    } else if (this.type === EntryType.Bookmark) {
+    } else if (this.type === "BOOKMARK") {
       this.content = "No content";
     } else {
       this.content = this.kindleEntry.contentClipp;
@@ -130,27 +125,27 @@ export class KindleEntryParsed {
   }
 
   parseEntryType(pageMetadata: string): EntryType {
-    const pageMetaddataLowerCase: string = pageMetadata.toLowerCase();
+    const pageMetaDate: string = pageMetadata.toLowerCase();
 
     const isTypeNote = EntryTypeTranslations.NOTE.some((token) =>
-      pageMetaddataLowerCase.includes(token)
+      pageMetaDate.includes(token)
     );
 
     const isTypeHighlight = EntryTypeTranslations.HIGHLIGHT.some((token) =>
-      pageMetaddataLowerCase.includes(token)
+      pageMetaDate.includes(token)
     );
 
     const isTypeBookmark = EntryTypeTranslations.BOOKMARK.some((token) =>
-      pageMetaddataLowerCase.includes(token)
+      pageMetaDate.includes(token)
     );
 
     if (isTypeNote) {
-      return EntryType.Note;
+      return "NOTE";
     } else if (isTypeHighlight) {
-      return EntryType.Highlight;
+      return "HIGHLIGHT";
     } else if (isTypeBookmark) {
-      return EntryType.Bookmark;
+      return "BOOKMARK";
     }
-    return EntryType.Unknown;
+    return "UNKNOWN";
   }
 }
