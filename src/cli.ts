@@ -3,7 +3,7 @@ import fs from 'fs';
 import { readMyClippingsFile } from '.';
 import { groupToBooks } from './parsers/bookParser';
 
-(async (): Promise<void> => {
+const run = async (): Promise<void> => {
   const file = '/Users/hady.osman/Desktop/My Clippings (hady).txt';
 
   // tslint:disable-next-line: no-console
@@ -16,4 +16,6 @@ import { groupToBooks } from './parsers/bookParser';
 
   // tslint:disable-next-line: no-console
   console.log(books);
-})();
+};
+
+run();
