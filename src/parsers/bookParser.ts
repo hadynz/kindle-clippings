@@ -1,6 +1,6 @@
 import { EntryType, ParsedBlock } from '../blocks/ParsedBlock';
 
-export type Entry = {
+export type Annotation = {
   content: string;
   type: EntryType;
   page: string;
@@ -11,16 +11,14 @@ export type Entry = {
 export type Book = {
   title: string;
   author?: string;
-  entries: Entry[];
+  annotations: Annotation[];
 };
 
 /**
  * Organize the data into an array of Books with embedded array of entities
- * @param entriesParsed
+ * @param parsedBlocks
  */
-export function organizeKindleEntriesByBooks(
-  entriesParsed: ParsedBlock[]
-): Book[] {
+export function groupToBooks(parsedBlocks: ParsedBlock[]): Book[] {
   const result: Book[] = [];
 
   /**
@@ -30,7 +28,7 @@ export function organizeKindleEntriesByBooks(
    * Second loop (forEach):
    * - Group entries inside books
    */
-  entriesParsed
+  parsedBlocks
     .reduce((accumulator, currentValue, currentIndex, list) => {
       if (currentValue.location === list[currentIndex + 1]?.location) {
         return accumulator;
@@ -44,14 +42,14 @@ export function organizeKindleEntriesByBooks(
         book = {
           title: entry.bookTitle,
           author: entry.authors,
-          entries: [],
+          annotations: [],
         };
 
         result.push(book);
       }
 
       if (entry.type === 'NOTE') {
-        const previousEntry = book.entries[book.entries.length - 1];
+        const previousEntry = book.annotations[book.annotations.length - 1];
 
         if (previousEntry) {
           previousEntry.note = entry.content;
@@ -65,7 +63,7 @@ export function organizeKindleEntriesByBooks(
         );
       }
 
-      book.entries.push({
+      book.annotations.push({
         content: entry.content,
         type: entry.type,
         page: entry.page,

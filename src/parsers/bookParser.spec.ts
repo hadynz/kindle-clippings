@@ -1,9 +1,9 @@
 import { RawBlock } from '../blocks/RawBlock';
 import { ParsedBlock } from '../blocks/ParsedBlock';
-import { organizeKindleEntriesByBooks } from './organizer';
+import { groupToBooks } from './bookParser';
 
-describe('organizeKindleEntriesByBooks', () => {
-  it('organises books by default', () => {
+describe('bookParser', () => {
+  it('Group some parsed blocks to books', () => {
     const rawBlocks: RawBlock[] = [
       new RawBlock(
         "Elantris: Tenth Anniversary Author's Definitive Edition (Sanderson, Brandon)",
@@ -45,7 +45,7 @@ describe('organizeKindleEntriesByBooks', () => {
     });
 
     // Act
-    const books = organizeKindleEntriesByBooks(parsedBlocks);
+    const books = groupToBooks(parsedBlocks);
 
     // Assert
     const firstBook = books[0];
@@ -56,13 +56,13 @@ describe('organizeKindleEntriesByBooks', () => {
     expect(firstBook.title).toBe(
       "Elantris: Tenth Anniversary Author's Definitive Edition"
     );
-    expect(firstBook.entries).toHaveLength(3);
-    expect(firstBook.entries[0].location).toBe('398');
-    expect(firstBook.entries[1].location).toBe('481');
+    expect(firstBook.annotations).toHaveLength(3);
+    expect(firstBook.annotations[0].location).toBe('398');
+    expect(firstBook.annotations[1].location).toBe('481');
 
     expect(secondBook.title).toBe('1984');
-    expect(secondBook.entries).toHaveLength(1); // Duplicate highlights on location are stripped
-    expect(secondBook.entries[0].note).toBe(
+    expect(secondBook.annotations).toHaveLength(1); // Duplicate highlights on location are stripped
+    expect(secondBook.annotations[0].note).toBe(
       'Airplane Accidents - also how software projects go wrong'
     );
   });

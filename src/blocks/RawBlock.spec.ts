@@ -1,11 +1,11 @@
 import { RawBlock } from './RawBlock';
 
-interface DataEntry {
+interface TestData {
   lines: string[];
   entry: RawBlock;
 }
 
-const sampleEntries: DataEntry[] = [
+const testData: TestData[] = [
   {
     lines: [
       '1984 (Orwell, George)',
@@ -39,17 +39,16 @@ const sampleEntries: DataEntry[] = [
 
 // eslint-disable-next-line no-undef
 describe('RawBlock', () => {
-  describe('createKindleClipp', () => {
-    test('Parses Kindle Entry correctly', () => {
-      // AAA
-      sampleEntries.forEach((sampleEntry) => {
-        // Arrange
-        // Act
-        const rawBlock = RawBlock.parse(sampleEntry.lines);
+  describe('Parsing My Clipping data to Raw Blocks', () => {
+    const t = testData.map((entry, index) =>
+      Object.assign(entry, {
+        toString: () => `${index} - ${entry.entry.titleLine}`,
+      })
+    );
 
-        // Assert
-        expect(rawBlock).toStrictEqual(sampleEntry.entry);
-      });
+    test.each(t)("Parse Raw Block entry '%s'", (data: TestData) => {
+      const rawBlock = RawBlock.parse(data.lines);
+      expect(rawBlock).toStrictEqual(data.entry);
     });
   });
 });

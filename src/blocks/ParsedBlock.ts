@@ -16,7 +16,6 @@ export const EntryTypeTranslations = Object.freeze({
 export type EntryType = 'NOTE' | 'HIGHLIGHT' | 'BOOKMARK' | 'UNKNOWN';
 
 export class ParsedBlock {
-  private kindleEntry: RawBlock;
   public authors?: string;
   public bookTitle!: string;
   public page!: string;
@@ -25,16 +24,14 @@ export class ParsedBlock {
   public type!: EntryType;
   public content!: string;
 
-  constructor(kindleEntry: RawBlock) {
-    this.kindleEntry = kindleEntry;
-
+  constructor(private kindleEntry: RawBlock) {
     this.parseAuthor();
     this.parseBookTitle();
     this.parseMetadata();
     this.parseContent();
   }
 
-  parseContent(): void {
+  private parseContent(): void {
     if (this.kindleEntry.contentLines.length === 0) {
       this.content = 'No content';
     } else if (this.type === 'BOOKMARK') {
@@ -44,7 +41,7 @@ export class ParsedBlock {
     }
   }
 
-  parseAuthor(): void {
+  private parseAuthor(): void {
     const bookTitleAndAuthors: string = this.kindleEntry.titleLine;
 
     const matches = bookTitleAndAuthors.match(/.*\(([^)]+)\)$/);
@@ -55,7 +52,7 @@ export class ParsedBlock {
     }
   }
 
-  parseBookTitle() {
+  private parseBookTitle() {
     const bookTitleAndAuthors: string = this.kindleEntry.titleLine;
 
     const matches = bookTitleAndAuthors.match(/.*\(([^)]+)\)$/);
@@ -73,7 +70,7 @@ export class ParsedBlock {
     }
   }
 
-  parseMetadata() {
+  private parseMetadata() {
     const sections = this.kindleEntry.metadataLine
       .split('|')
       .map((s) => s.trim());
@@ -104,7 +101,7 @@ export class ParsedBlock {
     }
   }
 
-  parseSectionForNumber(section: string) {
+  private parseSectionForNumber(section: string) {
     // If string has any standalone numbers, the first occurence will be a valid page number
     const matches1 = section.match(/(\d+)/);
     if (matches1) {
@@ -120,11 +117,11 @@ export class ParsedBlock {
     throw new Error(`Can't parse page number from pageMetadataStr: ${section}`);
   }
 
-  parseDateOfCreation(dateMetadata: string) {
+  private parseDateOfCreation(dateMetadata: string) {
     return dateMetadata;
   }
 
-  parseEntryType(pageMetadata: string): EntryType {
+  private parseEntryType(pageMetadata: string): EntryType {
     const pageMetaDate: string = pageMetadata.toLowerCase();
 
     const isTypeNote = EntryTypeTranslations.NOTE.some((token) =>

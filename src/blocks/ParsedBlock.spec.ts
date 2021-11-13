@@ -208,7 +208,7 @@ describe('ParsedBlock', () => {
     })
   );
 
-  test.each(t)("Parse MyClippings entry '%s'", (expected: TestData) => {
+  test.each(t)("Parse Parsed Block entry '%s'", (expected: TestData) => {
     const actual = new ParsedBlock(expected.entry);
 
     expect(actual.bookTitle).toBe(expected.titleParsed);

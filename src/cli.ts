@@ -1,8 +1,7 @@
 import fs from 'fs';
 
 import { readMyClippingsFile } from '.';
-import { parseRawBlocks } from './parsers/parser';
-import { organizeKindleEntriesByBooks } from './parsers/organizer';
+import { groupToBooks } from './parsers/bookParser';
 
 (async (): Promise<void> => {
   const file = '/Users/hady.osman/Desktop/My Clippings (hady).txt';
@@ -12,9 +11,8 @@ import { organizeKindleEntriesByBooks } from './parsers/organizer';
 
   const clippingsFileContent = fs.readFileSync(file, 'utf8');
 
-  const rawBlocks = readMyClippingsFile(clippingsFileContent);
-  const parsedBlocks = parseRawBlocks(rawBlocks);
-  const books = organizeKindleEntriesByBooks(parsedBlocks);
+  const parsedBlocks = readMyClippingsFile(clippingsFileContent);
+  const books = groupToBooks(parsedBlocks);
 
   // tslint:disable-next-line: no-console
   console.log(books);
