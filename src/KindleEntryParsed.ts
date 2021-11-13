@@ -1,19 +1,19 @@
-import type { KindleEntry } from "./KindleEntry";
+import type { KindleEntry } from './KindleEntry';
 
 export const EntryTypeTranslations = Object.freeze({
-  NOTE: ["note", "nota", "的笔记"],
+  NOTE: ['note', 'nota', '的笔记'],
   HIGHLIGHT: [
-    "highlight",
-    "subrayado", // Spanish
-    "surlignement", // French
-    "的标注", // Chinese
-    "destaque", // Portugese
-    "evidenziazione", // Italian
+    'highlight',
+    'subrayado', // Spanish
+    'surlignement', // French
+    '的标注', // Chinese
+    'destaque', // Portugese
+    'evidenziazione', // Italian
   ],
-  BOOKMARK: ["bookmark", "marcador", "signet", "的书签"],
+  BOOKMARK: ['bookmark', 'marcador', 'signet', '的书签'],
 });
 
-export type EntryType = "NOTE" | "HIGHLIGHT" | "BOOKMARK" | "UNKNOWN";
+export type EntryType = 'NOTE' | 'HIGHLIGHT' | 'BOOKMARK' | 'UNKNOWN';
 
 export class KindleEntryParsed {
   private kindleEntry: KindleEntry;
@@ -36,9 +36,9 @@ export class KindleEntryParsed {
 
   parseContent(): void {
     if (this.kindleEntry.contentClipp.length === 0) {
-      this.content = "No content";
-    } else if (this.type === "BOOKMARK") {
-      this.content = "No content";
+      this.content = 'No content';
+    } else if (this.type === 'BOOKMARK') {
+      this.content = 'No content';
     } else {
       this.content = this.kindleEntry.contentClipp;
     }
@@ -75,7 +75,7 @@ export class KindleEntryParsed {
 
   parseMetadata() {
     const sections = this.kindleEntry.metdataClipp
-      .split("|")
+      .split('|')
       .map((s) => s.trim());
 
     // There must always be at least two sections separated by pipes
@@ -114,7 +114,7 @@ export class KindleEntryParsed {
     // Return the last word in the sentence. Works for roman literals (e.g. "... on page ix")
     const matches2 = section.match(/^.* (.*)$/);
     if (matches2) {
-      return matches2[1].replace(/-.*/, "");
+      return matches2[1].replace(/-.*/, '');
     }
 
     throw new Error(`Can't parse page number from pageMetadataStr: ${section}`);
@@ -140,12 +140,12 @@ export class KindleEntryParsed {
     );
 
     if (isTypeNote) {
-      return "NOTE";
+      return 'NOTE';
     } else if (isTypeHighlight) {
-      return "HIGHLIGHT";
+      return 'HIGHLIGHT';
     } else if (isTypeBookmark) {
-      return "BOOKMARK";
+      return 'BOOKMARK';
     }
-    return "UNKNOWN";
+    return 'UNKNOWN';
   }
 }

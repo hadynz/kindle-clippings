@@ -26,10 +26,10 @@ export class KindleEntry {
       2+ -> content
       */
     const [title, metadata, ...content] = clipp.filter(
-      (el) => el.trim() !== ""
+      (el) => el.trim() !== ''
     );
 
-    return new KindleEntry(title, metadata, content.join("\n"));
+    return new KindleEntry(title, metadata, content.join('\n'));
   }
 
   toJSON() {

@@ -1,4 +1,4 @@
-import { EntryType, KindleEntryParsed } from "./KindleEntryParsed";
+import { EntryType, KindleEntryParsed } from './KindleEntryParsed';
 
 export type Entry = {
   content: string;
@@ -50,7 +50,7 @@ export function organizeKindleEntriesByBooks(
         result.push(book);
       }
 
-      if (entry.type === "NOTE") {
+      if (entry.type === 'NOTE') {
         const previousEntry = book.entries[book.entries.length - 1];
 
         if (previousEntry) {
@@ -60,7 +60,7 @@ export function organizeKindleEntriesByBooks(
 
         // tslint:disable-next-line: no-console
         console.warn(
-          "Note was not preceded by highlight. Skipping",
+          'Note was not preceded by highlight. Skipping',
           entry.content
         );
       }

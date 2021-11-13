@@ -1,5 +1,5 @@
-import { KindleEntry } from "./KindleEntry";
-import { KindleEntryParsed } from "./KindleEntryParsed";
+import { KindleEntry } from './KindleEntry';
+import { KindleEntryParsed } from './KindleEntryParsed';
 
 /**
  * Read a string line by line returns an Array of KindleEntry
@@ -8,13 +8,13 @@ import { KindleEntryParsed } from "./KindleEntryParsed";
 export function readKindleClipping(kindleClipping: string): KindleEntry[] {
   const buffer: string[] = [];
   const kindleClipps: KindleEntry[] = [];
-  const lines: string[] = kindleClipping.split("\n");
+  const lines: string[] = kindleClipping.split('\n');
 
   let totalLines: number = 0;
 
   for (const line of lines) {
     try {
-      if (line.includes("==========")) {
+      if (line.includes('==========')) {
         // console.log(buffer);
 
         kindleClipps.push(KindleEntry.createKindleClipp(buffer));
@@ -45,7 +45,7 @@ export function parseKindleEntries(
       kindleEntriesParsed.push(new KindleEntryParsed(entry));
     } catch (error) {
       // tslint:disable-next-line: no-console
-      console.error("Could not parse entry in clippings file", entry);
+      console.error('Could not parse entry in clippings file', entry);
 
       throw error;
     }
