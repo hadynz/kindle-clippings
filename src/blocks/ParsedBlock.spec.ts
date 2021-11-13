@@ -1,12 +1,12 @@
 import { RawBlock } from './RawBlock';
-import { ParsedBlock, EntryType } from './ParsedBlock';
+import { ParsedBlock, EntryType, Range } from './ParsedBlock';
 
 interface TestData {
   entry: RawBlock;
   titleParsed: string;
   author?: string;
-  page?: string;
-  location?: string;
+  page?: Range;
+  location?: Range;
   dateOfCreation: string;
   type: EntryType;
 }
@@ -20,12 +20,11 @@ const textFixtures: TestData[] = [
     ),
     titleParsed: 'The Effective Manager',
     author: 'Horstman, Mark',
-    page: 'ix',
-    location: '247',
+    page: { display: 'ix' },
+    location: { display: '247', from: 247, to: 248 },
     dateOfCreation: 'Added on Sunday, 18 February 2018 22:30:47',
     type: 'HIGHLIGHT',
   },
-
   {
     entry: new RawBlock(
       '非オタの彼女が俺の持ってるエロゲに興味津々なんだが…… (滝沢　慧;睦茸)',
@@ -34,8 +33,8 @@ const textFixtures: TestData[] = [
     ),
     titleParsed: '非オタの彼女が俺の持ってるエロゲに興味津々なんだが……',
     author: '滝沢　慧;睦茸',
-    page: '197',
-    location: '2031',
+    page: { display: '197', from: 197, to: 197 },
+    location: { display: '2031', from: 2031, to: 2035 },
     dateOfCreation: 'Añadido el sábado, 12 de octubre de 2019 0:37:31',
     type: 'HIGHLIGHT',
   },
@@ -47,8 +46,8 @@ const textFixtures: TestData[] = [
     ),
     titleParsed: '僕が七不思議になったわけ (メディアワークス文庫)',
     author: '小川 晴央',
-    page: '14',
-    location: '182',
+    page: { display: '14', from: 14, to: 14 },
+    location: { display: '182', from: 182, to: 183 },
     dateOfCreation: 'Añadido el lunes, 25 de noviembre de 2019 0:43:38',
     type: 'HIGHLIGHT',
   },
@@ -61,7 +60,7 @@ const textFixtures: TestData[] = [
     titleParsed:
       'Ｃｈａｏｓ；Ｃｈｉｌｄ　－Ｃｈｉｌｄｒｅｎ’ｓ　Ｒｅｖｉｖｅ－ (講談社ラノベ文庫)',
     author: 'ＭＡＧＥＳ．;Ｃｈｉｙｏ ｓｔ．ｉｎｃ;梅原英司',
-    location: '35',
+    location: { display: '35', from: 35, to: 36 },
     dateOfCreation: 'Added on Monday, July 20, 2020 12:58:07 AM',
     type: 'HIGHLIGHT',
   },
@@ -73,8 +72,8 @@ const textFixtures: TestData[] = [
     ),
     titleParsed: 'Le Retour du roi',
     author: 'J.R.R. Tolkien',
-    page: '200',
-    location: '3054',
+    page: { display: '200', from: 200, to: 200 },
+    location: { display: '3054', from: 3054, to: 3056 },
     dateOfCreation: 'Ajouté le mercredi 16 août 2017 02:14:10',
     type: 'HIGHLIGHT',
   },
@@ -86,8 +85,8 @@ const textFixtures: TestData[] = [
     ),
     titleParsed: 'The Effective Manager',
     author: 'Horstman, Mark',
-    page: 'ix',
-    location: '247',
+    page: { display: 'ix' },
+    location: { display: '247', from: 247, to: 248 },
     dateOfCreation: 'Added on Sunday, 18 February 2018 22:30:47',
     type: 'HIGHLIGHT',
   },
@@ -98,7 +97,7 @@ const textFixtures: TestData[] = [
       "Given the right circumstances, every human being on this earth would be willing to commit evil.'"
     ),
     titleParsed: 'paulo-coehlo-the-devil-and-miss-prym',
-    page: '14',
+    page: { display: '14', from: 14, to: 14 },
     dateOfCreation: 'Added on Saturday, 23 December 2017 09:46:53',
     type: 'HIGHLIGHT',
   },
@@ -109,7 +108,7 @@ const textFixtures: TestData[] = [
       '📖 功能栏位于左上方'
     ),
     titleParsed: '如何使用 Knotes',
-    page: '1',
+    page: { display: '1', from: 1, to: 1 },
     dateOfCreation: '添加于 2017年11月13日星期一 上午9:00:00',
     type: 'HIGHLIGHT',
   },
@@ -120,7 +119,7 @@ const textFixtures: TestData[] = [
       'our financial markets are essentially closed systems in which an advantage garnered by a given investor comes at the disadvantage of the other investors in the same market'
     ),
     titleParsed: "The Bogleheads' Guide to Investing - Taylor Larimore.pdf",
-    page: 'xvi',
+    page: { display: 'xvi' },
     dateOfCreation: 'Added on Monday, April 18, 2016 7:28:27 AM',
     type: 'HIGHLIGHT',
   },
@@ -132,7 +131,7 @@ const textFixtures: TestData[] = [
     ),
     titleParsed: 'Garota exemplar',
     author: 'Flynn, Gillian',
-    location: '2829',
+    location: { display: '2829', from: 2829, to: 2829 },
     dateOfCreation: 'Adicionado: sexta-feira, 29 de novembro de 2019 18:00:13',
     type: 'HIGHLIGHT',
   },
@@ -144,7 +143,7 @@ const textFixtures: TestData[] = [
     ),
     titleParsed: 'Your Money or Your Life',
     author: 'Vicki Robin',
-    location: '453',
+    location: { display: '453', from: 453, to: 454 },
     dateOfCreation: 'Aggiunto in data lunedì 8 marzo 2021 22:52:57',
     type: 'HIGHLIGHT',
   },
@@ -156,7 +155,7 @@ const textFixtures: TestData[] = [
     ),
     titleParsed: 'Outliers',
     author: 'Gladwell, Malcolm',
-    location: '1971',
+    location: { display: '1971', from: 1971, to: 1971 },
     dateOfCreation: 'Added on Wednesday, 6 January 2021 14:22:58',
     type: 'NOTE',
   },
@@ -168,8 +167,8 @@ const textFixtures: TestData[] = [
     ),
     titleParsed: 'The Effective Manager',
     author: 'Horstman, Mark',
-    location: '2543',
-    page: '136',
+    page: { display: '136', from: 136, to: 136 },
+    location: { display: '2543', from: 2543, to: 2543 },
     dateOfCreation: 'Added on Monday, 26 February 2018 11:00:31',
     type: 'BOOKMARK',
   },
@@ -181,7 +180,7 @@ const textFixtures: TestData[] = [
     ),
     titleParsed: 'Your P2K Articles (2021-04-02)',
     author: 'P2K',
-    location: '72',
+    location: { display: '72', from: 72, to: 73 },
     dateOfCreation: 'Aggiunto in data lunedì 5 aprile 2021 23:14:27',
     type: 'HIGHLIGHT',
   },
@@ -192,8 +191,8 @@ const textFixtures: TestData[] = [
       'Wells found such stunts from his rival annoying and was less interested in whether a mecha-elephant could actually clomp and clank across the earth'
     ),
     titleParsed: 'The Big Book of Science Fiction',
-    page: '1',
-    location: '755',
+    page: { display: '1', from: 1, to: 1 },
+    location: { display: '755', from: 755, to: 756 },
     dateOfCreation: 'Added on Monday, October 19, 2020 7:32:56 PM',
     type: 'HIGHLIGHT',
   },
@@ -211,11 +210,11 @@ describe('ParsedBlock', () => {
   test.each(t)("Parse Parsed Block entry '%s'", (expected: TestData) => {
     const actual = new ParsedBlock(expected.entry);
 
-    expect(actual.bookTitle).toBe(expected.titleParsed);
-    expect(actual.authors).toBe(expected.author);
-    expect(actual.page).toBe(expected.page);
-    expect(actual.location).toBe(expected.location);
-    expect(actual.dateOfCreation).toBe(expected.dateOfCreation);
-    expect(actual.type).toBe(expected.type);
+    expect(actual.bookTitle).toEqual(expected.titleParsed);
+    expect(actual.authors).toEqual(expected.author);
+    expect(actual.page).toEqual(expected.page);
+    expect(actual.location).toEqual(expected.location);
+    expect(actual.dateOfCreation).toEqual(expected.dateOfCreation);
+    expect(actual.type).toEqual(expected.type);
   });
 });

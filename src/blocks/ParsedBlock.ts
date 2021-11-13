@@ -15,54 +15,55 @@ export const EntryTypeTranslations = Object.freeze({
 
 export type EntryType = 'NOTE' | 'HIGHLIGHT' | 'BOOKMARK' | 'UNKNOWN';
 
+export type Range = {
+  from?: number;
+  to?: number;
+  display: string;
+};
+
+const toNumber = (value: string): number | undefined => {
+  return Number(value) || undefined;
+};
+
 export class ParsedBlock {
   public authors?: string;
   public bookTitle!: string;
-  public page!: string;
-  public location!: string;
+  public page?: Range;
+  public location?: Range;
   public dateOfCreation!: string;
   public type!: EntryType;
   public content!: string;
 
-  constructor(private kindleEntry: RawBlock) {
-    this.parseAuthor();
-    this.parseBookTitle();
+  constructor(private rawBlock: RawBlock) {
+    this.parseTitleAndAuthor();
     this.parseMetadata();
     this.parseContent();
   }
 
   private parseContent(): void {
-    if (this.kindleEntry.contentLines.length === 0) {
+    if (this.rawBlock.contentLines.length === 0) {
       this.content = 'No content';
     } else if (this.type === 'BOOKMARK') {
       this.content = 'No content';
     } else {
-      this.content = this.kindleEntry.contentLines;
+      this.content = this.rawBlock.contentLines;
     }
   }
 
-  private parseAuthor(): void {
-    const bookTitleAndAuthors: string = this.kindleEntry.titleLine;
-
-    const matches = bookTitleAndAuthors.match(/.*\(([^)]+)\)$/);
-
-    // Not all books will always have book meta data
-    if (matches) {
-      this.authors = matches[1];
-    }
-  }
-
-  private parseBookTitle() {
-    const bookTitleAndAuthors: string = this.kindleEntry.titleLine;
+  private parseTitleAndAuthor() {
+    const bookTitleAndAuthors: string = this.rawBlock.titleLine;
 
     const matches = bookTitleAndAuthors.match(/.*\(([^)]+)\)$/);
 
     // An author is specified "title (author)"
     if (matches) {
       const parenthesesIndex = bookTitleAndAuthors.indexOf(`(${matches[1]})`);
+
       this.bookTitle = bookTitleAndAuthors
         .substring(0, parenthesesIndex)
         .trim();
+
+      this.authors = matches[1];
     }
     // An author is not specified "title"
     else {
@@ -71,14 +72,12 @@ export class ParsedBlock {
   }
 
   private parseMetadata() {
-    const sections = this.kindleEntry.metadataLine
-      .split('|')
-      .map((s) => s.trim());
+    const sections = this.rawBlock.metadataLine.split('|').map((s) => s.trim());
 
     // There must always be at least two sections separated by pipes
     if (sections.length < 2) {
       throw new Error(
-        `Invalid metadata entry. Expected a page and/or location and created date entry: ${this.kindleEntry.metadataLine}`
+        `Invalid metadata entry. Expected a page and/or location and created date entry: ${this.rawBlock.metadataLine}`
       );
     }
 
@@ -101,17 +100,27 @@ export class ParsedBlock {
     }
   }
 
-  private parseSectionForNumber(section: string) {
-    // If string has any standalone numbers, the first occurence will be a valid page number
-    const matches1 = section.match(/(\d+)/);
+  private parseSectionForNumber(section: string): Range {
+    // If string has any standalone numbers, the first occurrence will be a valid page number
+    const matches1 = section.match(/(\d+)-?(\d+)?/);
     if (matches1) {
-      return matches1[0];
+      const [, from, to] = matches1;
+      return {
+        from: toNumber(from),
+        to: to == null ? toNumber(from) : toNumber(to),
+        display: from,
+      };
     }
 
     // Return the last word in the sentence. Works for roman literals (e.g. "... on page ix")
     const matches2 = section.match(/^.* (.*)$/);
     if (matches2) {
-      return matches2[1].replace(/-.*/, '');
+      const from = matches2[1].replace(/-.*/, '');
+      return {
+        from: toNumber(from),
+        to: toNumber(from),
+        display: from,
+      };
     }
 
     throw new Error(`Can't parse page number from pageMetadataStr: ${section}`);

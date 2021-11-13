@@ -1,10 +1,12 @@
-import { EntryType, ParsedBlock } from '../blocks/ParsedBlock';
+import _ from 'lodash';
+
+import { EntryType, ParsedBlock, Range } from '../blocks/ParsedBlock';
 
 export type Annotation = {
   content: string;
   type: EntryType;
-  page: string;
-  location: string;
+  page?: Range;
+  location?: Range;
   note?: string;
 };
 
@@ -14,62 +16,83 @@ export type Book = {
   annotations: Annotation[];
 };
 
+const toBooks = (blocks: ParsedBlock[]): Book[] => {
+  return blocks.reduce((acc: Book[], block) => {
+    const book = acc.find((b) => b.title === block.bookTitle) as Book;
+
+    if (book == null) {
+      return [
+        ...acc,
+        {
+          title: block.bookTitle,
+          author: block.authors,
+          annotations: [],
+        },
+      ];
+    }
+
+    return acc;
+  }, []);
+};
+
+const inBetween = (
+  value: number | undefined,
+  range: Range | undefined
+): boolean => {
+  if (value == null || range?.from == null || range.to == null) {
+    return false;
+  }
+  return value >= range.from && value <= range.to;
+};
+
 /**
  * Organize the data into an array of Books with embedded array of entities
  * @param parsedBlocks
  */
 export function groupToBooks(parsedBlocks: ParsedBlock[]): Book[] {
-  const result: Book[] = [];
+  const books = toBooks(parsedBlocks);
 
   /**
-   * First loop (reducer):
-   * - Skip any "duplicate" highlight. Duplicates are identified by being on the same location
-   * - Assumption: Entries are ordered by location
-   * Second loop (forEach):
-   * - Group entries inside books
+   * Dedupe blocks that start at the same location. Always take latest occurrence.
+   * We achieve this by reversing array, de-duping, and then reversing again
    */
-  parsedBlocks
-    .reduce((accumulator, currentValue, currentIndex, list) => {
-      if (currentValue.location === list[currentIndex + 1]?.location) {
-        return accumulator;
-      }
-      return [...accumulator, currentValue];
-    }, [] as ParsedBlock[])
-    .forEach((entry: ParsedBlock) => {
-      let book = result.find((r) => r.title === entry.bookTitle) as Book;
+  const reversedBlocks = _.reverse(_.clone(parsedBlocks));
 
-      if (book == null) {
-        book = {
-          title: entry.bookTitle,
-          author: entry.authors,
-          annotations: [],
-        };
+  const dedupedBlocks = _.uniqWith(reversedBlocks, (first, second) => {
+    return (
+      first.type === second.type &&
+      first.location?.from === second.location?.from
+    );
+  });
 
-        result.push(book);
-      }
+  _.reverse(dedupedBlocks);
 
-      if (entry.type === 'NOTE') {
-        const previousEntry = book.annotations[book.annotations.length - 1];
-
-        if (previousEntry) {
-          previousEntry.note = entry.content;
-          return;
-        }
-
-        // tslint:disable-next-line: no-console
-        console.warn(
-          'Note was not preceded by highlight. Skipping',
-          entry.content
-        );
-      }
-
+  // Add all blocks (that are not of type note) to their associated book
+  dedupedBlocks
+    .filter((b) => b.type !== 'NOTE')
+    .forEach((block) => {
+      const book = books.find((r) => r.title === block.bookTitle) as Book;
       book.annotations.push({
-        content: entry.content,
-        type: entry.type,
-        page: entry.page,
-        location: entry.location,
+        content: block.content,
+        type: block.type,
+        page: block.page,
+        location: block.location,
       });
     });
 
-  return result;
+  dedupedBlocks
+    .filter((b) => b.type === 'NOTE')
+    .forEach((noteBlock) => {
+      const book = books.find((r) => r.title === noteBlock.bookTitle) as Book;
+
+      const annotation = book.annotations.find((a) =>
+        inBetween(noteBlock.location?.from, a.location)
+      );
+
+      if (annotation != null) {
+        annotation.note = noteBlock.content;
+      }
+    });
+
+  return books;
 }
