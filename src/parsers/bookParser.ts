@@ -89,6 +89,7 @@ export function groupToBooks(parsedBlocks: ParsedBlock[]): Book[] {
         inBetween(noteBlock.location?.from, a.location)
       );
 
+      // No guarding. Override duplicate notes for the same annotation
       if (annotation != null) {
         annotation.note = noteBlock.content;
       }

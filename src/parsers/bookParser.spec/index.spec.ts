@@ -55,6 +55,6 @@ describe('bookParser', () => {
     expect(books[0].annotations).toHaveLength(3);
     expect(books[0].annotations[0].note).toEqual('Hollow 1');
     expect(books[0].annotations[1].note).toEqual('Few more');
-    expect(books[0].annotations[2].note).toEqual('Hollow 2');
+    expect(books[0].annotations[2].note).toEqual('Hollow 3');
   });
 });
