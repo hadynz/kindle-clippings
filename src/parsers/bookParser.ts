@@ -58,10 +58,11 @@ export function groupToBooks(parsedBlocks: ParsedBlock[]): Book[] {
    */
   const reversedBlocks = _.reverse(_.clone(parsedBlocks));
 
-  const dedupedBlocks = _.uniqWith(reversedBlocks, (first, second) => {
+  const dedupedBlocks = _.uniqWith(reversedBlocks, (block1, block2) => {
     return (
-      first.type === second.type &&
-      first.location?.from === second.location?.from
+      block1.bookTitle === block2.bookTitle &&
+      block1.type === block2.type &&
+      block1.location?.from === block2.location?.from
     );
   });
 

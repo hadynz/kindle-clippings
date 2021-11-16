@@ -1,0 +1,15 @@
+Amazon has ruined search and Google is in on it (HN to Kindle)
+- Your Highlight on Location 3-9 | Added on Thursday, July 29, 2021 10:37:23 PM
+
+PaulDavisThe1st 2 hours ago [–] I'd like to note, donning my #2 at amzn hat again, that when the idea for affiliate sales originally came up, we certainly did imagine people creating pages with lists like "best bikes for under $500". However, I feel fairly confident in saying that nobody involved in that in the 95-96 timeframe was imagining that such pages would be created by anyone other than actual enthusiasts (probably a reflection of the state of the internet at the time). In retrospect, this was a profound failure of our imaginations back then. It's also somewhat damning that in the 25+ years since, nothing about the affiliate sales concept has been substantially modified to mitigate the weaponization of this by "best X for 202X" pages.
+==========
+Duolingo reaches $6.5B valuation on day of IPO (HN to Kindle)
+- Your Highlight on Location 3-10 | Added on Thursday, July 29, 2021 10:41:05 PM
+
+least 6 hours ago [–] I was a cryptologic linguist for the army and went through a 16 month course of 6-7 hours of classroom instruction per day M-F, native speaking instructors, tons of immersion, and a couple hours of homework each night and left still feeling like I hardly knew the language that I was supposed to be interpreting. Unless your major in college is a specific language, you probably won't achieve any sort of fluency in your target language from taking a course in it, either. Language learning is hard and a multifaceted thing that no single application is going to adequately prepare you for. Speaking and listening are related skills yet speaking is much harder than listening, and both are much harder than reading (for the vast majority of languages). Rote memorization is necessary. Immersion is necessary.
+==========
+Papers every developer should read at least twice (2017) (b8cd5f21-3503-4d65-bfbf-cea4ad864210@hntokindle.com)
+- Your Highlight on Location 3-13 | Added on Wednesday, July 21, 2021 11:37:08 AM
+
+danpalmer 7 hours ago [–] While this list looks solid, I think it's telling that none of the papers that immediately came to my mind were on this list. I suspect that there are many more, and which papers are important to any one person is as varied as the disciplines we have within software engineering. - Out of the Tar Pit 2005, a paper on Functional Reactive Programming that is an excellent read for anyone doing functional programming, UI programming, or a number of other things. - Consistent Hashing and Random Trees: Distributed Caching Protocols for Relieving Hot Spots on the World Wide Web 1997, important read for anyone working in distributed systems or services with any sort of scale. - Roy Fielding's dissertation 2000, to learn just how widely applicable REST principles are and how misunderstood it is as a design. - The Part Time Parliament 1998, the original Paxos paper, important basis for anyone working with distributed systems. - The Cathedral and the Bazaar 1997, an essay not a paper, but a good background to the open source world.
+==========
