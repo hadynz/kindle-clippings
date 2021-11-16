@@ -57,4 +57,15 @@ describe('bookParser', () => {
     expect(books[0].annotations[1].note).toEqual('Few more');
     expect(books[0].annotations[2].note).toEqual('Hollow 3');
   });
+
+  it('Distinct books with same location are seen as the independent books they are', () => {
+    const parsedBlocks = readFile('./scenarios/dup-location-scenario.txt');
+
+    // Act
+    const books = groupToBooks(parsedBlocks);
+
+    // Assert
+    expect(books).toHaveLength(3);
+    books.forEach((book) => expect(book.annotations).toHaveLength(1));
+  });
 });
