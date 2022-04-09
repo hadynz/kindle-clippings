@@ -52,24 +52,8 @@ const inBetween = (
 export function groupToBooks(parsedBlocks: ParsedBlock[]): Book[] {
   const books = toBooks(parsedBlocks);
 
-  /**
-   * Dedupe blocks that start at the same location. Always take latest occurrence.
-   * We achieve this by reversing array, de-duping, and then reversing again
-   */
-  const reversedBlocks = _.reverse(_.clone(parsedBlocks));
-
-  const dedupedBlocks = _.uniqWith(reversedBlocks, (block1, block2) => {
-    return (
-      block1.bookTitle === block2.bookTitle &&
-      block1.type === block2.type &&
-      block1.location?.from === block2.location?.from
-    );
-  });
-
-  _.reverse(dedupedBlocks);
-
   // Add all blocks (that are not of type note) to their associated book
-  dedupedBlocks
+  parsedBlocks
     .filter((b) => b.type !== 'NOTE')
     .forEach((block) => {
       const book = books.find((r) => r.title === block.bookTitle) as Book;
@@ -81,7 +65,7 @@ export function groupToBooks(parsedBlocks: ParsedBlock[]): Book[] {
       });
     });
 
-  dedupedBlocks
+  parsedBlocks
     .filter((b) => b.type === 'NOTE')
     .forEach((noteBlock) => {
       const book = books.find((r) => r.title === noteBlock.bookTitle) as Book;
