@@ -27,7 +27,7 @@ const toNumber = (value: string): number | undefined => {
 
 export class ParsedBlock {
   public authors?: string;
-  public bookTitle!: string;
+  public title!: string;
   public page?: Range;
   public location?: Range;
   public dateOfCreation!: string;
@@ -59,15 +59,13 @@ export class ParsedBlock {
     if (matches) {
       const parenthesesIndex = bookTitleAndAuthors.indexOf(`(${matches[1]})`);
 
-      this.bookTitle = bookTitleAndAuthors
-        .substring(0, parenthesesIndex)
-        .trim();
+      this.title = bookTitleAndAuthors.substring(0, parenthesesIndex).trim();
 
       this.authors = matches[1];
     }
     // An author is not specified "title"
     else {
-      this.bookTitle = bookTitleAndAuthors.trim();
+      this.title = bookTitleAndAuthors.trim();
     }
   }
 

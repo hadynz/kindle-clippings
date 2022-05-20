@@ -18,13 +18,13 @@ export type Book = {
 
 const toBooks = (blocks: ParsedBlock[]): Book[] => {
   return blocks.reduce((acc: Book[], block) => {
-    const book = acc.find((b) => b.title === block.bookTitle) as Book;
+    const book = acc.find((b) => b.title === block.title) as Book;
 
     if (book == null) {
       return [
         ...acc,
         {
-          title: block.bookTitle,
+          title: block.title,
           author: block.authors,
           annotations: [],
         },
@@ -64,7 +64,7 @@ export function groupToBooks(parsedBlocks: ParsedBlock[]): Book[] {
 
   const dedupedBlocks = _.uniqWith(reversedBlocks, (block1, block2) => {
     return (
-      block1.bookTitle === block2.bookTitle &&
+      block1.title === block2.title &&
       block1.type === block2.type &&
       block1.location?.from === block2.location?.from &&
       twoWayIncludes(block1.content, block2.content)
@@ -77,7 +77,7 @@ export function groupToBooks(parsedBlocks: ParsedBlock[]): Book[] {
   dedupedBlocks
     .filter((b) => b.type !== 'NOTE')
     .forEach((block) => {
-      const book = books.find((r) => r.title === block.bookTitle) as Book;
+      const book = books.find((r) => r.title === block.title) as Book;
       book.annotations.push({
         content: block.content,
         type: block.type,
@@ -89,7 +89,7 @@ export function groupToBooks(parsedBlocks: ParsedBlock[]): Book[] {
   dedupedBlocks
     .filter((b) => b.type === 'NOTE')
     .forEach((noteBlock) => {
-      const book = books.find((r) => r.title === noteBlock.bookTitle) as Book;
+      const book = books.find((r) => r.title === noteBlock.title) as Book;
 
       const annotation = book.annotations.find((a) =>
         inBetween(noteBlock.location?.from, a.location)
