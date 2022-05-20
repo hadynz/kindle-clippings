@@ -27,7 +27,7 @@ const toNumber = (value: string): number | undefined => {
 
 export class ParsedBlock {
   public authors?: string;
-  public bookTitle!: string;
+  public title!: string;
   public page?: Range;
   public location?: Range;
   public dateOfCreation!: string;
@@ -59,15 +59,13 @@ export class ParsedBlock {
     if (matches) {
       const parenthesesIndex = bookTitleAndAuthors.indexOf(`(${matches[1]})`);
 
-      this.bookTitle = bookTitleAndAuthors
-        .substring(0, parenthesesIndex)
-        .trim();
+      this.title = bookTitleAndAuthors.substring(0, parenthesesIndex).trim();
 
       this.authors = matches[1];
     }
     // An author is not specified "title"
     else {
-      this.bookTitle = bookTitleAndAuthors.trim();
+      this.title = bookTitleAndAuthors.trim();
     }
   }
 
@@ -81,8 +79,10 @@ export class ParsedBlock {
       );
     }
 
+    const [firstSection, secondSection] = sections;
+
     // Type of entry is always defined in the first section
-    this.type = this.parseEntryType(sections[0]);
+    this.type = this.parseEntryType(firstSection);
 
     // Date of creation is always defined in the last section
     this.dateOfCreation = this.parseDateOfCreation(
@@ -90,13 +90,16 @@ export class ParsedBlock {
     );
 
     if (sections.length === 3) {
-      this.page = this.parseSectionForNumber(sections[0]);
-      this.location = this.parseSectionForNumber(sections[1]);
+      this.page = this.parseSectionForNumber(firstSection);
+      this.location = this.parseSectionForNumber(secondSection);
     } // When author is not set, it is not an Amazon book and page will only be available
-    else if (this.authors === undefined) {
-      this.page = this.parseSectionForNumber(sections[0]);
+    else if (
+      this.authors === undefined ||
+      firstSection.toLowerCase().includes('page')
+    ) {
+      this.page = this.parseSectionForNumber(firstSection);
     } else {
-      this.location = this.parseSectionForNumber(sections[0]);
+      this.location = this.parseSectionForNumber(firstSection);
     }
   }
 
