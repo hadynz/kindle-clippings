@@ -45,6 +45,10 @@ const inBetween = (
   return value >= range.from && value <= range.to;
 };
 
+const twoWayIncludes = (value1: string, value2: string): boolean => {
+  return value1.includes(value2) || value2.includes(value1);
+};
+
 /**
  * Organize the data into an array of Books with embedded array of entities
  * @param parsedBlocks
@@ -62,7 +66,8 @@ export function groupToBooks(parsedBlocks: ParsedBlock[]): Book[] {
     return (
       block1.bookTitle === block2.bookTitle &&
       block1.type === block2.type &&
-      block1.location?.from === block2.location?.from
+      block1.location?.from === block2.location?.from &&
+      twoWayIncludes(block1.content, block2.content)
     );
   });
 

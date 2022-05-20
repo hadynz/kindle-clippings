@@ -196,6 +196,19 @@ const textFixtures: TestData[] = [
     dateOfCreation: 'Added on Monday, October 19, 2020 7:32:56 PM',
     type: 'HIGHLIGHT',
   },
+  {
+    entry: new RawBlock(
+      'Oreilly.Developing.Backbone.js.Applications.Apr.2012 (Addy Osmani)',
+      '- Highlight on Page 10 | Added on Monday, 3 December 12 19:51:33 Greenwich Mean Time',
+      'Some highlight content...'
+    ),
+    titleParsed: 'Oreilly.Developing.Backbone.js.Applications.Apr.2012',
+    author: 'Addy Osmani',
+    page: { display: '10', from: 10, to: 10 },
+    dateOfCreation:
+      'Added on Monday, 3 December 12 19:51:33 Greenwich Mean Time',
+    type: 'HIGHLIGHT',
+  },
 ];
 
 describe('ParsedBlock', () => {

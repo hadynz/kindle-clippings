@@ -68,4 +68,18 @@ describe('bookParser', () => {
     expect(books).toHaveLength(3);
     books.forEach((book) => expect(book.annotations).toHaveLength(1));
   });
+
+  it('Multiple highlights on the same page are not picked up as duplicates', () => {
+    const parsedBlocks = readFile('./scenarios/dup-same-page.txt');
+
+    // Act
+    const books = groupToBooks(parsedBlocks);
+
+    // Assert
+    expect(books).toHaveLength(1);
+    expect(books[0].annotations).toHaveLength(3);
+    expect(books[0].annotations[0].content).toEqual('Highlight 1');
+    expect(books[0].annotations[1].content).toEqual('Highlight 2');
+    expect(books[0].annotations[2].content).toEqual('Highlight 3');
+  });
 });
