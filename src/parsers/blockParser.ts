@@ -6,16 +6,17 @@ import { ParsedBlock } from '../blocks/ParsedBlock';
  * @param fileContent
  */
 export function readMyClippingsFile(fileContent: string): RawBlock[] {
-  const blocks: RawBlock[] = [];
-  const blockLinesBuffer: string[] = [];
-
   const lines = fileContent.split('\n');
+
+  const blocks: RawBlock[] = [];
+
+  let blockLinesBuffer: string[] = [];
 
   for (const [index, line] of lines.entries()) {
     try {
       if (line.includes('==========')) {
         blocks.push(RawBlock.parse(blockLinesBuffer));
-        blockLinesBuffer.splice(0);
+        blockLinesBuffer = [];
       } else {
         blockLinesBuffer.push(line.trim());
       }
@@ -25,7 +26,7 @@ export function readMyClippingsFile(fileContent: string): RawBlock[] {
     }
   }
 
-  return blocks;
+  return blocks.filter((b) => b.titleLine != null);
 }
 
 /**
