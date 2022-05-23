@@ -1,6 +1,6 @@
 {
   "name": "@hadynz/kindle-clippings",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "Package for parsing a MyClippings.txt file obtained from a Kindle and organizing it",
   "author": "Hady Osman <hadyos@gmail.com>",
   "license": "MIT",

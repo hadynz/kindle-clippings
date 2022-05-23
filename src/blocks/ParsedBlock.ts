@@ -42,9 +42,9 @@ export class ParsedBlock {
 
   private parseContent(): void {
     if (this.rawBlock.contentLines.length === 0) {
-      this.content = 'No content';
+      this.content = '';
     } else if (this.type === 'BOOKMARK') {
-      this.content = 'No content';
+      this.content = '';
     } else {
       this.content = this.rawBlock.contentLines;
     }

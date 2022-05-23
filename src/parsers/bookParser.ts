@@ -76,6 +76,7 @@ export function groupToBooks(parsedBlocks: ParsedBlock[]): Book[] {
   // Add all blocks (that are not of type note) to their associated book
   dedupedBlocks
     .filter((b) => b.type !== 'NOTE')
+    .filter((b) => b.content !== '')
     .forEach((block) => {
       const book = books.find((r) => r.title === block.title) as Book;
       book.annotations.push({
@@ -88,6 +89,7 @@ export function groupToBooks(parsedBlocks: ParsedBlock[]): Book[] {
 
   dedupedBlocks
     .filter((b) => b.type === 'NOTE')
+    .filter((b) => b.content !== '')
     .forEach((noteBlock) => {
       const book = books.find((r) => r.title === noteBlock.title) as Book;
 
