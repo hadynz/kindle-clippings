@@ -82,4 +82,17 @@ describe('bookParser', () => {
     expect(books[0].annotations[1].content).toEqual('Highlight 2');
     expect(books[0].annotations[2].content).toEqual('Highlight 3');
   });
+
+  it('Highlight blocks with no content are stripped out and completely ignored', () => {
+    const parsedBlocks = readFile('./scenarios/no-content-scenario.txt');
+
+    // Act
+    const books = groupToBooks(parsedBlocks);
+
+    // Assert
+    expect(books).toHaveLength(1);
+    expect(books[0].annotations).toHaveLength(1);
+    expect(books[0].annotations[0].content).toBeTruthy();
+    expect(books[0].annotations[0].type).toEqual('HIGHLIGHT');
+  });
 });
