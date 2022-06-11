@@ -1,5 +1,10 @@
 import { RawBlock } from './RawBlock';
-import { ParsedBlock, EntryType, Range } from './ParsedBlock';
+import {
+  ParsedBlock,
+  EntryType,
+  Range,
+  parseDateOfCreation,
+} from './ParsedBlock';
 
 interface TestData {
   entry: RawBlock;
@@ -7,7 +12,6 @@ interface TestData {
   author?: string;
   page?: Range;
   location?: Range;
-  dateOfCreation: string;
   type: EntryType;
 }
 
@@ -22,7 +26,6 @@ const textFixtures: TestData[] = [
     author: 'Horstman, Mark',
     page: { display: 'ix' },
     location: { display: '247', from: 247, to: 248 },
-    dateOfCreation: 'Added on Sunday, 18 February 2018 22:30:47',
     type: 'HIGHLIGHT',
   },
   {
@@ -35,7 +38,6 @@ const textFixtures: TestData[] = [
     author: '滝沢　慧;睦茸',
     page: { display: '197', from: 197, to: 197 },
     location: { display: '2031', from: 2031, to: 2035 },
-    dateOfCreation: 'Añadido el sábado, 12 de octubre de 2019 0:37:31',
     type: 'HIGHLIGHT',
   },
   {
@@ -48,7 +50,6 @@ const textFixtures: TestData[] = [
     author: '小川 晴央',
     page: { display: '14', from: 14, to: 14 },
     location: { display: '182', from: 182, to: 183 },
-    dateOfCreation: 'Añadido el lunes, 25 de noviembre de 2019 0:43:38',
     type: 'HIGHLIGHT',
   },
   {
@@ -61,7 +62,6 @@ const textFixtures: TestData[] = [
       'Ｃｈａｏｓ；Ｃｈｉｌｄ　－Ｃｈｉｌｄｒｅｎ’ｓ　Ｒｅｖｉｖｅ－ (講談社ラノベ文庫)',
     author: 'ＭＡＧＥＳ．;Ｃｈｉｙｏ ｓｔ．ｉｎｃ;梅原英司',
     location: { display: '35', from: 35, to: 36 },
-    dateOfCreation: 'Added on Monday, July 20, 2020 12:58:07 AM',
     type: 'HIGHLIGHT',
   },
   {
@@ -74,7 +74,6 @@ const textFixtures: TestData[] = [
     author: 'J.R.R. Tolkien',
     page: { display: '200', from: 200, to: 200 },
     location: { display: '3054', from: 3054, to: 3056 },
-    dateOfCreation: 'Ajouté le mercredi 16 août 2017 02:14:10',
     type: 'HIGHLIGHT',
   },
   {
@@ -87,7 +86,6 @@ const textFixtures: TestData[] = [
     author: 'Horstman, Mark',
     page: { display: 'ix' },
     location: { display: '247', from: 247, to: 248 },
-    dateOfCreation: 'Added on Sunday, 18 February 2018 22:30:47',
     type: 'HIGHLIGHT',
   },
   {
@@ -98,7 +96,6 @@ const textFixtures: TestData[] = [
     ),
     title: 'paulo-coehlo-the-devil-and-miss-prym',
     page: { display: '14', from: 14, to: 14 },
-    dateOfCreation: 'Added on Saturday, 23 December 2017 09:46:53',
     type: 'HIGHLIGHT',
   },
   {
@@ -109,7 +106,6 @@ const textFixtures: TestData[] = [
     ),
     title: '如何使用 Knotes',
     page: { display: '1', from: 1, to: 1 },
-    dateOfCreation: '添加于 2017年11月13日星期一 上午9:00:00',
     type: 'HIGHLIGHT',
   },
   {
@@ -120,7 +116,6 @@ const textFixtures: TestData[] = [
     ),
     title: "The Bogleheads' Guide to Investing - Taylor Larimore.pdf",
     page: { display: 'xvi' },
-    dateOfCreation: 'Added on Monday, April 18, 2016 7:28:27 AM',
     type: 'HIGHLIGHT',
   },
   {
@@ -132,7 +127,6 @@ const textFixtures: TestData[] = [
     title: 'Garota exemplar',
     author: 'Flynn, Gillian',
     location: { display: '2829', from: 2829, to: 2829 },
-    dateOfCreation: 'Adicionado: sexta-feira, 29 de novembro de 2019 18:00:13',
     type: 'HIGHLIGHT',
   },
   {
@@ -144,7 +138,6 @@ const textFixtures: TestData[] = [
     title: 'Your Money or Your Life',
     author: 'Vicki Robin',
     location: { display: '453', from: 453, to: 454 },
-    dateOfCreation: 'Aggiunto in data lunedì 8 marzo 2021 22:52:57',
     type: 'HIGHLIGHT',
   },
   {
@@ -156,7 +149,6 @@ const textFixtures: TestData[] = [
     title: 'Outliers',
     author: 'Gladwell, Malcolm',
     location: { display: '1971', from: 1971, to: 1971 },
-    dateOfCreation: 'Added on Wednesday, 6 January 2021 14:22:58',
     type: 'NOTE',
   },
   {
@@ -169,7 +161,6 @@ const textFixtures: TestData[] = [
     author: 'Horstman, Mark',
     page: { display: '136', from: 136, to: 136 },
     location: { display: '2543', from: 2543, to: 2543 },
-    dateOfCreation: 'Added on Monday, 26 February 2018 11:00:31',
     type: 'BOOKMARK',
   },
   {
@@ -181,7 +172,6 @@ const textFixtures: TestData[] = [
     title: 'Your P2K Articles (2021-04-02)',
     author: 'P2K',
     location: { display: '72', from: 72, to: 73 },
-    dateOfCreation: 'Aggiunto in data lunedì 5 aprile 2021 23:14:27',
     type: 'HIGHLIGHT',
   },
   {
@@ -193,7 +183,6 @@ const textFixtures: TestData[] = [
     title: 'The Big Book of Science Fiction',
     page: { display: '1', from: 1, to: 1 },
     location: { display: '755', from: 755, to: 756 },
-    dateOfCreation: 'Added on Monday, October 19, 2020 7:32:56 PM',
     type: 'HIGHLIGHT',
   },
   {
@@ -205,8 +194,6 @@ const textFixtures: TestData[] = [
     title: 'Oreilly.Developing.Backbone.js.Applications.Apr.2012',
     author: 'Addy Osmani',
     page: { display: '10', from: 10, to: 10 },
-    dateOfCreation:
-      'Added on Monday, 3 December 12 19:51:33 Greenwich Mean Time',
     type: 'HIGHLIGHT',
   },
 ];
@@ -227,7 +214,39 @@ describe('ParsedBlock', () => {
     expect(actual.authors).toEqual(expected.author);
     expect(actual.page).toEqual(expected.page);
     expect(actual.location).toEqual(expected.location);
-    expect(actual.dateOfCreation).toEqual(expected.dateOfCreation);
     expect(actual.type).toEqual(expected.type);
   });
+});
+
+describe('parseDateOfCreation', () => {
+  test.each([
+    [
+      'Added on Monday, April 18, 2016 7:28:27 AM',
+      new Date('2016-04-18T07:28:27'),
+    ],
+    [
+      'Añadido el sábado, 12 de octubre de 2019 0:37:31', // Spanish
+      new Date('2019-10-12T00:37:31'),
+    ],
+    [
+      'Ajouté le mercredi 16 août 2017 02:14:10', // French
+      new Date('2017-08-16T02:14:10'),
+    ],
+    [
+      'Adicionado: sexta-feira, 29 de novembro de 2019 18:00:13', // Portuguese
+      new Date('2019-11-29T18:00:13'),
+    ],
+    [
+      'Aggiunto in data lunedì 8 marzo 2021 22:52:57', // Italian
+      new Date('2021-03-08T22:52:57'),
+    ],
+    ['Invalid date', undefined],
+    ['', undefined],
+  ])(
+    'Formats "%s" as "%o"',
+    (dateString: string, expected: Date | undefined) => {
+      const actual = parseDateOfCreation(dateString);
+      expect(actual).toEqual(expected);
+    }
+  );
 });
