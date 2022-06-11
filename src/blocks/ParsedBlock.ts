@@ -1,4 +1,11 @@
+import moment from 'moment';
 import type { RawBlock } from './RawBlock';
+
+/**
+ * Suppress moment deprecation warning
+ * Ref: https://stackoverflow.com/a/46410816/80427
+ */
+moment.suppressDeprecationWarnings = true;
 
 export const EntryTypeTranslations = Object.freeze({
   NOTE: ['note', 'nota', '的笔记'],
@@ -25,12 +32,30 @@ const toNumber = (value: string): number | undefined => {
   return Number(value) || undefined;
 };
 
+export const parseDateOfCreation = (
+  serializedDate: string
+): Date | undefined => {
+  const parseAsEn = moment(serializedDate);
+  if (parseAsEn.isValid()) {
+    return parseAsEn.toDate();
+  }
+
+  for (const locale of ['it', 'fr', 'es', 'pt']) {
+    const parseAsI18l = moment(serializedDate, 'LL LTS', locale);
+    if (parseAsI18l.isValid()) {
+      return parseAsI18l.toDate();
+    }
+  }
+
+  return undefined;
+};
+
 export class ParsedBlock {
   public authors?: string;
   public title!: string;
   public page?: Range;
   public location?: Range;
-  public dateOfCreation!: string;
+  public dateOfCreation?: Date;
   public type!: EntryType;
   public content!: string;
 
@@ -130,7 +155,7 @@ export class ParsedBlock {
   }
 
   private parseDateOfCreation(dateMetadata: string) {
-    return dateMetadata;
+    return parseDateOfCreation(dateMetadata);
   }
 
   private parseEntryType(pageMetadata: string): EntryType {
