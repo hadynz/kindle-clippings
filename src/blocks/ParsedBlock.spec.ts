@@ -1,10 +1,5 @@
 import { RawBlock } from './RawBlock';
-import {
-  ParsedBlock,
-  EntryType,
-  Range,
-  parseDateOfCreation,
-} from './ParsedBlock';
+import { ParsedBlock, EntryType, Range, parseToUtcDate } from './ParsedBlock';
 
 interface TestData {
   entry: RawBlock;
@@ -222,30 +217,30 @@ describe('parseDateOfCreation', () => {
   test.each([
     [
       'Added on Monday, April 18, 2016 7:28:27 AM',
-      new Date('2016-04-18T07:28:27'),
+      new Date('2016-04-18T07:28:27Z'),
     ],
     [
       'Añadido el sábado, 12 de octubre de 2019 0:37:31', // Spanish
-      new Date('2019-10-12T00:37:31'),
+      new Date('2019-10-12T00:37:31Z'),
     ],
     [
       'Ajouté le mercredi 16 août 2017 02:14:10', // French
-      new Date('2017-08-16T02:14:10'),
+      new Date('2017-08-16T02:14:10Z'),
     ],
     [
       'Adicionado: sexta-feira, 29 de novembro de 2019 18:00:13', // Portuguese
-      new Date('2019-11-29T18:00:13'),
+      new Date('2019-11-29T18:00:13Z'),
     ],
     [
       'Aggiunto in data lunedì 8 marzo 2021 22:52:57', // Italian
-      new Date('2021-03-08T22:52:57'),
+      new Date('2021-03-08T22:52:57Z'),
     ],
     ['Invalid date', undefined],
     ['', undefined],
   ])(
     'Formats "%s" as "%o"',
     (dateString: string, expected: Date | undefined) => {
-      const actual = parseDateOfCreation(dateString);
+      const actual = parseToUtcDate(dateString);
       expect(actual).toEqual(expected);
     }
   );
