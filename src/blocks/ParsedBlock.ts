@@ -32,16 +32,14 @@ const toNumber = (value: string): number | undefined => {
   return Number(value) || undefined;
 };
 
-export const parseDateOfCreation = (
-  serializedDate: string
-): Date | undefined => {
-  const parseAsEn = moment(serializedDate);
+export const parseToUtcDate = (serializedDate: string): Date | undefined => {
+  const parseAsEn = moment.utc(serializedDate);
   if (parseAsEn.isValid()) {
     return parseAsEn.toDate();
   }
 
   for (const locale of ['it', 'fr', 'es', 'pt']) {
-    const parseAsI18l = moment(serializedDate, 'LL LTS', locale);
+    const parseAsI18l = moment.utc(serializedDate, 'LL LTS', locale);
     if (parseAsI18l.isValid()) {
       return parseAsI18l.toDate();
     }
@@ -155,7 +153,7 @@ export class ParsedBlock {
   }
 
   private parseDateOfCreation(dateMetadata: string) {
-    return parseDateOfCreation(dateMetadata);
+    return parseToUtcDate(dateMetadata);
   }
 
   private parseEntryType(pageMetadata: string): EntryType {
