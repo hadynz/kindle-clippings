@@ -8,6 +8,7 @@ export type Annotation = {
   page?: Range;
   location?: Range;
   note?: string;
+  createdDate?: Date;
 };
 
 export type Book = {
@@ -84,6 +85,7 @@ export function groupToBooks(parsedBlocks: ParsedBlock[]): Book[] {
         type: block.type,
         page: block.page,
         location: block.location,
+        createdDate: block.dateOfCreation,
       });
     });
 
