@@ -30,9 +30,21 @@ describe('bookParser', () => {
       "Elantris: Tenth Anniversary Author's Definitive Edition"
     );
     expect(firstBook.annotations).toHaveLength(3);
+
     expect(firstBook.annotations[0].location?.from).toEqual(398);
+    expect(firstBook.annotations[0].createdDate).toEqual(
+      new Date('2017-08-24T22:31:50Z')
+    );
+
     expect(firstBook.annotations[1].location?.from).toEqual(481);
+    expect(firstBook.annotations[1].createdDate).toEqual(
+      new Date('2017-08-24T23:34:25Z')
+    );
+
     expect(firstBook.annotations[2].location?.from).toEqual(483);
+    expect(firstBook.annotations[2].createdDate).toEqual(
+      new Date('2017-08-24T23:34:29Z')
+    );
 
     expect(secondBook.title).toEqual('1984');
     expect(secondBook.annotations).toHaveLength(1); // Duplicate highlights on location are stripped
@@ -41,6 +53,9 @@ describe('bookParser', () => {
     );
     expect(secondBook.annotations[0].note).toEqual(
       'The ABC model - key for growth and happiness'
+    );
+    expect(secondBook.annotations[0].createdDate).toEqual(
+      new Date('2017-09-09T13:27:09Z')
     );
   });
 
