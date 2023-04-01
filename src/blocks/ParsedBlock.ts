@@ -19,6 +19,7 @@ export const EntryTypeTranslations = Object.freeze({
     'evidenziazione', // Italian
   ],
   BOOKMARK: ['bookmark', 'marcador', 'signet', '的书签'],
+  DIVIDERS: ['页'],
 });
 
 export type EntryType = 'NOTE' | 'HIGHLIGHT' | 'BOOKMARK' | 'UNKNOWN';
@@ -81,7 +82,13 @@ export class ParsedBlock {
   }
 
   private parseMetadata() {
-    const sections = this.rawBlock.metadataLine.split('|').map((s) => s.trim());
+    const sections = EntryTypeTranslations['DIVIDERS']
+      .reduce(
+        (str, token) => str.replace(token, '|'),
+        this.rawBlock.metadataLine
+      )
+      .split('|')
+      .map((s) => s.trim());
 
     // There must always be at least two sections separated by pipes
     if (sections.length < 2) {
@@ -93,7 +100,7 @@ export class ParsedBlock {
     const [firstSection, secondSection] = sections;
 
     // Type of entry is always defined in the first section
-    this.type = this.parseEntryType(firstSection);
+    this.type = this.parseEntryType(this.rawBlock.metadataLine);
 
     // Date of creation is always defined in the last section
     this.dateOfCreation = this.parseDateOfCreation(
