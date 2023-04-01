@@ -1,6 +1,6 @@
 import moment from 'moment';
 import type { RawBlock } from './RawBlock';
-import { parseTitleAndAuthor } from './utils/parseTitleAndAuthor.spec';
+import { parseTitleAndAuthor } from './utils/parseTitleAndAuthor';
 
 /**
  * Suppress moment deprecation warning
@@ -8,7 +8,7 @@ import { parseTitleAndAuthor } from './utils/parseTitleAndAuthor.spec';
  */
 moment.suppressDeprecationWarnings = true;
 
-export const EntryTypeTranslations = Object.freeze({
+export const EntryTypeTranslations = {
   NOTE: ['note', 'nota', '的笔记'],
   HIGHLIGHT: [
     'highlight',
@@ -20,7 +20,7 @@ export const EntryTypeTranslations = Object.freeze({
   ],
   BOOKMARK: ['bookmark', 'marcador', 'signet', '的书签'],
   DIVIDERS: ['页'],
-});
+};
 
 export type EntryType = 'NOTE' | 'HIGHLIGHT' | 'BOOKMARK' | 'UNKNOWN';
 
@@ -82,11 +82,10 @@ export class ParsedBlock {
   }
 
   private parseMetadata() {
-    const sections = EntryTypeTranslations['DIVIDERS']
-      .reduce(
-        (str, token) => str.replace(token, '|'),
-        this.rawBlock.metadataLine
-      )
+    const sections = EntryTypeTranslations.DIVIDERS.reduce(
+      (str, token) => str.replace(token, '|'),
+      this.rawBlock.metadataLine
+    )
       .split('|')
       .map((s) => s.trim());
 

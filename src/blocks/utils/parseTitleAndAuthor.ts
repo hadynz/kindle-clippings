@@ -48,7 +48,7 @@ const createSegmentStack = (input: string): Segment[] => {
 export const parseTitleAndAuthor = (input: string): BookInfo => {
   const stack = createSegmentStack(input);
 
-  let author: string | undefined = undefined;
+  let author: string | undefined;
 
   if (stack[stack.length - 1].level === 1) {
     const lastSegment = stack.pop();
