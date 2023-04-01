@@ -191,6 +191,17 @@ const textFixtures: TestData[] = [
     page: { display: '10', from: 10, to: 10 },
     type: 'HIGHLIGHT',
   },
+  {
+    entry: new RawBlock(
+      '飘（上下） (外国文学名著名译丛书) ((美)米切尔)',
+      '- 您在位置 #2543-2544的标注 | 添加于 2023年2月9日星期四 下午6:35:21',
+      '梅拉妮才十八岁，怎么就甘心成天守在家里，不去找点儿乐趣，宁愿为哥哥披黑纱守丧？'
+    ),
+    title: '飘（上下） (外国文学名著名译丛书)',
+    author: '(美)米切尔',
+    page: { display: '2543', from: 2543, to: 2544 },
+    type: 'HIGHLIGHT',
+  },
 ];
 
 describe('ParsedBlock', () => {

@@ -1,5 +1,6 @@
 import moment from 'moment';
 import type { RawBlock } from './RawBlock';
+import { parseTitleAndAuthor } from './utils/parseTitleAndAuthor.spec';
 
 /**
  * Suppress moment deprecation warning
@@ -74,22 +75,9 @@ export class ParsedBlock {
   }
 
   private parseTitleAndAuthor() {
-    const bookTitleAndAuthors: string = this.rawBlock.titleLine;
-
-    const matches = bookTitleAndAuthors.match(/.*\(([^)]+)\)$/);
-
-    // An author is specified "title (author)"
-    if (matches) {
-      const parenthesesIndex = bookTitleAndAuthors.indexOf(`(${matches[1]})`);
-
-      this.title = bookTitleAndAuthors.substring(0, parenthesesIndex).trim();
-
-      this.authors = matches[1];
-    }
-    // An author is not specified "title"
-    else {
-      this.title = bookTitleAndAuthors.trim();
-    }
+    const bookInfo = parseTitleAndAuthor(this.rawBlock.titleLine);
+    this.title = bookInfo.title;
+    this.authors = bookInfo.author;
   }
 
   private parseMetadata() {
