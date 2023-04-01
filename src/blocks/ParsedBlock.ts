@@ -1,5 +1,6 @@
 import moment from 'moment';
 import type { RawBlock } from './RawBlock';
+import { parseTitleAndAuthor } from './utils/parseTitleAndAuthor';
 
 /**
  * Suppress moment deprecation warning
@@ -7,7 +8,7 @@ import type { RawBlock } from './RawBlock';
  */
 moment.suppressDeprecationWarnings = true;
 
-export const EntryTypeTranslations = Object.freeze({
+export const EntryTypeTranslations = {
   NOTE: ['note', 'nota', '的笔记'],
   HIGHLIGHT: [
     'highlight',
@@ -18,7 +19,8 @@ export const EntryTypeTranslations = Object.freeze({
     'evidenziazione', // Italian
   ],
   BOOKMARK: ['bookmark', 'marcador', 'signet', '的书签'],
-});
+  DIVIDERS: ['页'],
+};
 
 export type EntryType = 'NOTE' | 'HIGHLIGHT' | 'BOOKMARK' | 'UNKNOWN';
 
@@ -74,26 +76,18 @@ export class ParsedBlock {
   }
 
   private parseTitleAndAuthor() {
-    const bookTitleAndAuthors: string = this.rawBlock.titleLine;
-
-    const matches = bookTitleAndAuthors.match(/.*\(([^)]+)\)$/);
-
-    // An author is specified "title (author)"
-    if (matches) {
-      const parenthesesIndex = bookTitleAndAuthors.indexOf(`(${matches[1]})`);
-
-      this.title = bookTitleAndAuthors.substring(0, parenthesesIndex).trim();
-
-      this.authors = matches[1];
-    }
-    // An author is not specified "title"
-    else {
-      this.title = bookTitleAndAuthors.trim();
-    }
+    const bookInfo = parseTitleAndAuthor(this.rawBlock.titleLine);
+    this.title = bookInfo.title;
+    this.authors = bookInfo.author;
   }
 
   private parseMetadata() {
-    const sections = this.rawBlock.metadataLine.split('|').map((s) => s.trim());
+    const sections = EntryTypeTranslations.DIVIDERS.reduce(
+      (str, token) => str.replace(token, '|'),
+      this.rawBlock.metadataLine
+    )
+      .split('|')
+      .map((s) => s.trim());
 
     // There must always be at least two sections separated by pipes
     if (sections.length < 2) {
@@ -105,7 +99,7 @@ export class ParsedBlock {
     const [firstSection, secondSection] = sections;
 
     // Type of entry is always defined in the first section
-    this.type = this.parseEntryType(firstSection);
+    this.type = this.parseEntryType(this.rawBlock.metadataLine);
 
     // Date of creation is always defined in the last section
     this.dateOfCreation = this.parseDateOfCreation(

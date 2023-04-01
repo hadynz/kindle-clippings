@@ -96,11 +96,12 @@ const textFixtures: TestData[] = [
   {
     entry: new RawBlock(
       '如何使用 Knotes',
-      '- 您在第 1 页（位置 #1-1）的标注 | 添加于 2017年11月13日星期一 上午9:00:00',
+      '- 您在第 3 页（位置 #1-1）的标注 | 添加于 2017年11月13日星期一 上午9:00:00',
       '📖 功能栏位于左上方'
     ),
     title: '如何使用 Knotes',
-    page: { display: '1', from: 1, to: 1 },
+    page: { display: '3', from: 3, to: 3 },
+    location: { display: '1', from: 1, to: 1 },
     type: 'HIGHLIGHT',
   },
   {
@@ -190,6 +191,41 @@ const textFixtures: TestData[] = [
     author: 'Addy Osmani',
     page: { display: '10', from: 10, to: 10 },
     type: 'HIGHLIGHT',
+  },
+  {
+    entry: new RawBlock(
+      '飘（上下） (外国文学名著名译丛书) ((美)米切尔)',
+      '- 您在位置 #2543-2544的标注 | 添加于 2023年2月9日星期四 下午6:35:21',
+      '梅拉妮才十八岁，怎么就甘心成天守在家里，不去找点儿乐趣，宁愿为哥哥披黑纱守丧？'
+    ),
+    title: '飘（上下） (外国文学名著名译丛书)',
+    author: '(美)米切尔',
+    location: { display: '2543', from: 2543, to: 2544 },
+    type: 'HIGHLIGHT',
+  },
+  {
+    entry: new RawBlock(
+      '苏东坡传（林语堂独家授权作品）（新东方董老师推荐！3天破10万！中国经典历史传记必读！） (博集文学典藏系列) (林语堂)',
+      '- 您在第 25 页（位置 #243-244）的标注 | 添加于 2023年2月14日星期二 上午5:15:57',
+      '人生是如同戏剧，但是在人生的戏剧里，最富有智慧与最精明的伶人，对于下一幕的大事如何，也是茫然无知。'
+    ),
+    title:
+      '苏东坡传（林语堂独家授权作品）（新东方董老师推荐！3天破10万！中国经典历史传记必读！） (博集文学典藏系列)',
+    author: '林语堂',
+    page: { display: '25', from: 25, to: 25 },
+    location: { display: '243', from: 243, to: 244 },
+    type: 'HIGHLIGHT',
+  },
+  {
+    entry: new RawBlock(
+      '飘（上下） (外国文学名著名译丛书) ((美)米切尔)',
+      '- 您在位置 #2544 的笔记 | 添加于 2023年2月9日星期四 下午6:36:38',
+      '原来是为她哥哥守孝,到这里才说明白。'
+    ),
+    title: '飘（上下） (外国文学名著名译丛书)',
+    author: '(美)米切尔',
+    location: { display: '2544', from: 2544, to: 2544 },
+    type: 'NOTE',
   },
 ];
 

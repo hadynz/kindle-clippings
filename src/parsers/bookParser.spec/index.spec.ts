@@ -110,4 +110,20 @@ describe('bookParser', () => {
     expect(books[0].annotations[0].content).toBeTruthy();
     expect(books[0].annotations[0].type).toEqual('HIGHLIGHT');
   });
+
+  it('Note for Chinese book is correctly picked up', () => {
+    const parsedBlocks = readFile('./scenarios/missing-note-scenario.txt');
+
+    // Act
+    const books = groupToBooks(parsedBlocks);
+
+    // Assert
+    expect(books).toHaveLength(1);
+    expect(books[0].annotations).toHaveLength(1);
+    expect(books[0].annotations[0].content).toBeTruthy();
+    expect(books[0].annotations[0].type).toEqual('HIGHLIGHT');
+    expect(books[0].annotations[0].note).toEqual(
+      '原来是为她哥哥守孝,到这里才说明白。'
+    );
+  });
 });
