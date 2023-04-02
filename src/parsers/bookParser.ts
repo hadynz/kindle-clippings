@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import * as _ from 'lodash';
 
 import { EntryType, ParsedBlock, Range } from '../blocks/ParsedBlock';
 
@@ -19,7 +19,7 @@ export type Book = {
 
 const toBooks = (blocks: ParsedBlock[]): Book[] => {
   return blocks.reduce((acc: Book[], block) => {
-    const book = acc.find((b) => b.title === block.title) as Book;
+    const book = acc.find((b) => b.title === block.title);
 
     if (book == null) {
       return [
@@ -79,7 +79,7 @@ export function groupToBooks(parsedBlocks: ParsedBlock[]): Book[] {
     .filter((b) => b.type !== 'NOTE')
     .filter((b) => b.content !== '')
     .forEach((block) => {
-      const book = books.find((r) => r.title === block.title) as Book;
+      const book = books.find((r) => r.title === block.title);
       book.annotations.push({
         content: block.content,
         type: block.type,
@@ -93,7 +93,7 @@ export function groupToBooks(parsedBlocks: ParsedBlock[]): Book[] {
     .filter((b) => b.type === 'NOTE')
     .filter((b) => b.content !== '')
     .forEach((noteBlock) => {
-      const book = books.find((r) => r.title === noteBlock.title) as Book;
+      const book = books.find((r) => r.title === noteBlock.title);
 
       const annotation = book.annotations.find((a) =>
         inBetween(noteBlock.location?.from, a.location)

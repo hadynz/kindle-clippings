@@ -1,17 +1,21 @@
 {
+  "include": ["src/**/*", "tests/**/*", "webpack.config.ts"],
+  "exclude": ["node_modules/*"],
   "compilerOptions": {
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "module": "commonjs",
-    "target": "es6",
-    "noImplicitAny": true,
-    "removeComments": false,
-    "preserveConstEnums": true,
-    "sourceMap": true,
+    "types": ["node", "jest"],
+    "baseUrl": ".",
+    "paths": {
+      "src": ["src/*", "tests/*"],
+      "~/*": ["src/*"]
+    },
+    "resolveJsonModule": true,
     "esModuleInterop": true,
-    "declaration": true
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "src/**/*.spec.ts", "src/cli.ts"]
+  // Fixes errors when changing `module` to ES in the above compiler options
+  // See: https://github.com/webpack/webpack-cli/issues/2458#issuecomment-846635277
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  }
 }

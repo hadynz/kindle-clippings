@@ -1,8 +1,9 @@
-import fs from 'fs';
-import path from 'path';
+import * as fs from 'fs';
+import * as path from 'path';
+
+import { readMyClippingsFile } from '../../index';
 
 import { groupToBooks } from './../bookParser';
-import { readMyClippingsFile } from '../../index';
 
 const readFile = (filePath: string) => {
   const scenarioFile = fs.readFileSync(
