@@ -1,11 +1,13 @@
 import moment from 'moment';
-import type { RawBlock } from './RawBlock';
+
 import { parseTitleAndAuthor } from './utils/parseTitleAndAuthor';
+import type { RawBlock } from './RawBlock';
 
 /**
  * Suppress moment deprecation warning
  * Ref: https://stackoverflow.com/a/46410816/80427
  */
+// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 moment.suppressDeprecationWarnings = true;
 
 export const EntryTypeTranslations = {
@@ -36,6 +38,7 @@ const toNumber = (value: string): number | undefined => {
 
 export const parseToUtcDate = (serializedDate: string): Date | undefined => {
   const parseAsEn = moment.utc(serializedDate);
+
   if (parseAsEn.isValid()) {
     return parseAsEn.toDate();
   }

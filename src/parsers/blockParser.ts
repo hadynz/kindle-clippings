@@ -1,5 +1,5 @@
-import { RawBlock } from '../blocks/RawBlock';
 import { ParsedBlock } from '../blocks/ParsedBlock';
+import { RawBlock } from '../blocks/RawBlock';
 
 /**
  * Read a string line by line returns an Array of KindleEntry
@@ -12,7 +12,7 @@ export function readMyClippingsFile(fileContent: string): RawBlock[] {
 
   let blockLinesBuffer: string[] = [];
 
-  for (const [index, line] of lines.entries()) {
+  lines.forEach((line, index) => {
     try {
       if (line.includes('==========')) {
         blocks.push(RawBlock.parse(blockLinesBuffer));
@@ -24,7 +24,7 @@ export function readMyClippingsFile(fileContent: string): RawBlock[] {
       console.error(`Error parsing on line: ${index + 1}`);
       throw error;
     }
-  }
+  });
 
   return blocks.filter((b) => b.titleLine != null);
 }

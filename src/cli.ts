@@ -1,9 +1,9 @@
-import fs from 'fs';
+import * as fs from 'fs';
 
-import { readMyClippingsFile } from '.';
 import { groupToBooks } from './parsers/bookParser';
+import { readMyClippingsFile } from '.';
 
-const run = async (): Promise<void> => {
+const run = () => {
   const file = '/Users/hady.osman/Desktop/My Clippings (hady).txt';
 
   // tslint:disable-next-line: no-console

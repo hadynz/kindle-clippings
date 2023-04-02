@@ -1,5 +1,5 @@
+import { EntryType, ParsedBlock, parseToUtcDate, Range } from './ParsedBlock';
 import { RawBlock } from './RawBlock';
-import { ParsedBlock, EntryType, Range, parseToUtcDate } from './ParsedBlock';
 
 interface TestData {
   entry: RawBlock;

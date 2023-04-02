@@ -1,7 +1,7 @@
 import { ParsedBlock } from './blocks/ParsedBlock';
 import {
-  readMyClippingsFile as readFile,
   parseRawBlocks,
+  readMyClippingsFile as readFile,
 } from './parsers/blockParser';
 
 export const readMyClippingsFile = (fileContent: string): ParsedBlock[] => {
