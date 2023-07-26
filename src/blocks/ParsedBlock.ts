@@ -11,7 +11,7 @@ import type { RawBlock } from './RawBlock';
 moment.suppressDeprecationWarnings = true;
 
 export const EntryTypeTranslations = {
-  NOTE: ['note', 'nota', '的笔记'],
+  NOTE: ['note', 'nota', '的笔记', 'Notiz', 'заметка'],
   HIGHLIGHT: [
     'highlight',
     'subrayado', // Spanish
@@ -19,8 +19,10 @@ export const EntryTypeTranslations = {
     '的标注', // Chinese
     'destaque', // Portugese
     'evidenziazione', // Italian
+    'Markierung', // German
+    'выделенный отрывок', // Russian
   ],
-  BOOKMARK: ['bookmark', 'marcador', 'signet', '的书签'],
+  BOOKMARK: ['bookmark', 'marcador', 'signet', '的书签', 'закладка'],
   DIVIDERS: ['页'],
 };
 

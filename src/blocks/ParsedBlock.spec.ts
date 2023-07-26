@@ -227,6 +227,67 @@ const textFixtures: TestData[] = [
     location: { display: '2544', from: 2544, to: 2544 },
     type: 'NOTE',
   },
+  {
+    entry: new RawBlock(
+      'Рождение сложности. Эволюционная биология сегодня: неожиданные открытия и новые вопросы (Александр Владимирович Марков)',
+      '– Ваш выделенный отрывок в месте 904–905 | Добавлено: понедельник, 24 июля 2023 г. в 15:44:52',
+      'жизнь в основе своей – это самоподдерживающийся, автокаталитический процесс.'
+    ),
+    title:
+      'Рождение сложности. Эволюционная биология сегодня: неожиданные открытия и новые вопросы',
+    author: 'Александр Владимирович Марков',
+    location: { display: '904', from: 904, to: 905 },
+    type: 'HIGHLIGHT',
+  },
+  {
+    entry: new RawBlock(
+      'vasilij_vasilevich_kandinskij_o_ (Василий Васильевич Кандинский)',
+      '– Ваша заметка в месте 4264 | Добавлено: понедельник, 17 июля 2023 г. в 8:38:11',
+      'Но в цветовом пространстве'
+    ),
+    title: 'vasilij_vasilevich_kandinskij_o_',
+    author: 'Василий Васильевич Кандинский',
+    location: { display: '4264', from: 4264, to: 4264 },
+    type: 'NOTE',
+  },
+  {
+    entry: new RawBlock(
+      'Берлинский дневник. Европа накануне Второй мировой войны глазами американского корреспондента (Уильям Лоуренс Ширер)',
+      '– Ваша закладка в месте 2712 | Добавлено: пятница, 12 августа 2022 г. в 12:48:17',
+      ''
+    ),
+    title: 'Берлинский дневник. Европа накануне Второй мировой войны глазами американского корреспондента',
+    author: 'Уильям Лоуренс Ширер',
+    location: { display: '2712', from: 2712, to: 2712 },
+    type: 'BOOKMARK',
+  },
+  
+  
+  {
+    entry: new RawBlock(
+      'Using Fragments in Android (Lars Vogel)',
+      '- Meine Notiz auf Seite 11 | Position 161 | Hinzugefügt am Dienstag, 26. November 2013 um 19:56:11 Uhr',
+      'Improved interface implementation check.'
+    ),
+    title: 'Using Fragments in Android',
+    author: 'Lars Vogel',
+    page: { display: '11', from: 11, to: 11 },
+    location: { display: '161', from: 161, to: 161 },
+    type: 'NOTE',
+  },
+  {
+    entry: new RawBlock(
+      'Using Fragments in Android (Lars Vogel)',
+      '- Meine Markierung auf Seite 11 | Position 155-161 | Hinzugefügt am Dienstag, 26. November 2013 um 19:56:11 Uhr',
+      '    if (activity instanceof OnItemSelectedListener) {       listener = (OnItemSelectedListener) activity;     } else {       throw new ClassCastException(activity.toString()           + " must implemenet MyListFragment.OnItemSelectedListener");     }'
+    ),
+    title: 'Using Fragments in Android',
+    author: 'Lars Vogel',
+    page: { display: '11', from: 11, to: 11 },
+    location: { display: '161', from: 155, to: 161 },
+    type: 'HIGHLIGHT',
+  },
+
 ];
 
 describe('ParsedBlock', () => {
